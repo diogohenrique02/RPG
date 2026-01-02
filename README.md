@@ -24,4 +24,22 @@ Junte-se à resistência e liberte **Curupira, Iara, Saci, Cuca** e outras lenda
 - Conexão com internet (apenas para recursos externos)
 - JavaScript habilitado
 
-## 🏗️ Estrutura do Projeto
+### 🎭 Sistema de RPG Completo
+- **Criação de personagem** detalhada com origens brasileiras
+- **Sistema de atributos** baseado em elementos (Floresta, Água, Caos, Sonhos)
+- **Missões narrativas** com escolhas impactantes
+- **Sistema de dados** integrado para testes de habilidade
+- **Progressão de personagem** e recompensas
+
+### 🐉 Mitologia Brasileira
+- **Curupira**: Protetor das florestas
+- **Iara**: Senhora das águas doces  
+- **Saci-Pererê**: Travesso dos ventos
+- **Cuca**: Guardiã dos sonhos
+- **E mais lendas brasileiras!**
+
+### 🎨 Interface
+- Design responsivo para todos os dispositivos
+- Animações suaves e efeitos visuais
+- Tema escuro com elementos de mitologia
+- Interface intuitiva e imersiva
