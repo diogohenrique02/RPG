@@ -57,6 +57,6 @@ Junte-se à resistência e liberte **Curupira, Iara, Saci, Cuca** e outras lenda
 
 ### 📞 Contato
 - telefone: +5512996036422
-- gmail para contato: youareidiot12321@gmail.com
+- Email para contato: youareidiot12321@gmail.com
 
 # "Quando as lendas são esquecidas, o mundo adoece. Quando são lembradas, renascem."
