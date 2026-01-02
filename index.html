@@ -1,11 +1,773 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Renascimento das Lendas - RPG Brasileiro</title>
+    <meta name="description" content="Um RPG baseado na mitologia brasileira onde você é um Escolhido para salvar as lendas esquecidas do Brasil.">
+    <meta name="keywords" content="RPG, Brasil, mitologia, Curupira, Iara, Saci, Cuca, jogo, online">
+    <meta property="og:title" content="Renascimento das Lendas - RPG Brasileiro">
+    <meta property="og:description" content="Salve as lendas brasileiras da Ordem do Véu neste RPG épico!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1546182990-dffeafbe841d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&h=630&q=80">
+    <meta property="og:url" content="https://seuusuario.github.io/renascimento-das-lendas">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a472a;
+            --secondary: #2e8b57;
+            --accent: #d35400;
+            --legend: #9b59b6;
+            --dark: #0c1e13;
+            --light: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0c1e13 0%, #1a472a 50%, #0c1e13 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animações de fundo */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(155, 89, 182, 0.3), transparent);
+            animation: float 20s infinite linear;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, rgba(26, 71, 42, 0.95), rgba(12, 30, 19, 0.95));
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--legend);
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            color: var(--legend);
+            margin-bottom: 15px;
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        .logo-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, var(--secondary), var(--legend), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .logo-subtitle {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.3rem;
+            color: var(--light);
+            opacity: 0.9;
+            letter-spacing: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(26, 71, 42, 0.3), transparent);
+        }
+
+        .hero h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: var(--light);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #bdc3c7;
+        }
+
+        /* Botões de ação */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 50px 0;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 220px;
+            height: 220px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(26, 71, 42, 0.9), rgba(12, 30, 19, 0.9));
+            border: 2px solid var(--legend);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--secondary), var(--legend), var(--accent));
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .action-btn:hover::before {
+            opacity: 1;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(155, 89, 182, 0.4);
+        }
+
+        .action-btn i {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .action-btn span {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .action-btn small {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: center;
+        }
+
+        /* Seção de funcionalidades */
+        .features {
+            padding: 80px 0;
+            background: rgba(12, 30, 19, 0.5);
+            border-top: 1px solid rgba(46, 139, 87, 0.2);
+            border-bottom: 1px solid rgba(46, 139, 87, 0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(26, 71, 42, 0.8), rgba(12, 30, 19, 0.8));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(46, 139, 87, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--legend);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--legend);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        /* Seção de lendas */
+        .legends {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .legends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .legend-card {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.8), rgba(26, 37, 48, 0.8));
+            border-radius: 15px;
+            padding: 25px;
+            border-top: 5px solid var(--legend);
+            transition: all 0.3s ease;
+        }
+
+        .legend-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(155, 89, 182, 0.3);
+        }
+
+        .legend-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--legend);
+        }
+
+        .legend-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--light);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, rgba(12, 30, 19, 0.95), rgba(26, 71, 42, 0.95));
+            padding: 50px 0 30px;
+            text-align: center;
+            border-top: 3px solid var(--legend);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--legend);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .logo-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                gap: 20px;
+            }
+            
+            .action-btn {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-title {
+                font-size: 2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .action-btn {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .action-btn i {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Botão de início rápido */
+        .quick-start {
+            text-align: center;
+            padding: 60px 0;
+            background: radial-gradient(circle at center, rgba(155, 89, 182, 0.1), transparent);
+        }
+
+        .quick-start-btn {
+            display: inline-block;
+            padding: 20px 50px;
+            background: linear-gradient(45deg, var(--legend), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(155, 89, 182, 0.4);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+
+        .quick-start-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.6);
+        }
+
+        .quick-start-btn:active {
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-    
+    <!-- Formas flutuantes de fundo -->
+    <div class="floating-shapes" id="floatingShapes"></div>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-dragon logo-icon"></i>
+                <h1 class="logo-title">Renascimento das Lendas</h1>
+                <p class="logo-subtitle">O Chamado dos Protetores do Brasil</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Quando as lendas são esquecidas, o mundo adoece</h2>
+                <p>Em um Brasil onde as lendas foram capturadas pela Ordem do Véu, apenas os Escolhidos podem restaurar o equilíbrio entre o mundo material e o espiritual. Você ouvirá o chamado?</p>
+                
+                <div class="action-buttons">
+                    <a href="#play" class="action-btn">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Jogar Agora</span>
+                        <small>Comece sua aventura</small>
+                    </a>
+                    
+                    <a href="#story" class="action-btn">
+                        <i class="fas fa-book-open"></i>
+                        <span>A História</span>
+                        <small>Conheça o enredo</small>
+                    </a>
+                    
+                    <a href="#legends" class="action-btn">
+                        <i class="fas fa-dragon"></i>
+                        <span>As Lendas</span>
+                        <small>Curupira, Iara, Saci, Cuca</small>
+                    </a>
+                    
+                    <a href="#features" class="action-btn">
+                        <i class="fas fa-cogs"></i>
+                        <span>Recursos</span>
+                        <small>O que você pode fazer</small>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="story" class="features">
+            <div class="container">
+                <h2 style="text-align: center; font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 50px; color: var(--light);">
+                    A Grande História
+                </h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-tree feature-icon"></i>
+                        <h3>O Tempo das Lendas</h3>
+                        <p>Por séculos, entidades como Curupira, Iara e Saci protegiam o equilíbrio entre o mundo visível e o invisível. Eram forças vivas da natureza.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-city feature-icon"></i>
+                        <h3>O Esquecimento</h3>
+                        <p>Com o crescimento das cidades, as lendas viraram histórias, depois piadas, até serem esquecidas. No silêncio, algo sombrio despertou.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-skull-crossbones feature-icon"></i>
+                        <h3>A Ordem do Véu</h3>
+                        <p>Uma organização secreta começou a capturar as lendas, drenando sua essência para alimentar máquinas de controle e dominação.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-heart-crack feature-icon"></i>
+                        <h3>O Chamado</h3>
+                        <p>A Terra chorou. Pessoas comuns começaram a ouvir presságios e visões. Esses são os Escolhidos - humanos com uma centelha de lenda dentro de si.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="legends" class="legends">
+            <div class="container">
+                <h2 style="font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 50px; color: var(--light);">
+                    As Lendas Brasileiras
+                </h2>
+                
+                <div class="legends-grid">
+                    <div class="legend-card">
+                        <i class="fas fa-tree legend-icon"></i>
+                        <h4>Curupira</h4>
+                        <p>Protetor das florestas com pés virados para trás. Confunde quem não respeita a mata.</p>
+                    </div>
+                    
+                    <div class="legend-card">
+                        <i class="fas fa-water legend-icon"></i>
+                        <h4>Iara</h4>
+                        <p>Senhora das águas doces. Seu canto encanta e protege os segredos dos rios.</p>
+                    </div>
+                    
+                    <div class="legend-card">
+                        <i class="fas fa-wind legend-icon"></i>
+                        <h4>Saci-Pererê</h4>
+                        <p>Travesso de uma perna só. Causa redemoinhos e confusões para proteger a floresta.</p>
+                    </div>
+                    
+                    <div class="legend-card">
+                        <i class="fas fa-moon legend-icon"></i>
+                        <h4>Cuca</h4>
+                        <p>Guardiã dos sonhos. Incompreendida, protege o limiar entre realidade e pesadelo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2 style="text-align: center; font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 50px; color: var(--light);">
+                    Recursos do Jogo
+                </h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-user-plus feature-icon"></i>
+                        <h3>Criação de Personagem</h3>
+                        <p>Crie seu Escolhido com origem, profissão e conexão única com uma lenda brasileira.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-quest feature-icon"></i>
+                        <h3>Missões Épicas</h3>
+                        <p>Participe de missões para resgatar lendas, sabotar a Ordem do Véu e restaurar o equilíbrio.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-dice feature-icon"></i>
+                        <h3>Sistema de Dados</h3>
+                        <p>Use dados virtuais para testes de habilidade baseados em suas afinidades com os elementos.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Progressão</h3>
+                        <p>Desenvolva suas habilidades, complete missões e aumente sua conexão com as lendas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="play" class="quick-start">
+            <div class="container">
+                <h2 style="font-family: 'Cinzel', serif; font-size: 2.5rem; margin-bottom: 30px; color: var(--light);">
+                    Pronto para a Jornada?
+                </h2>
+                <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px; color: #bdc3c7;">
+                    O Brasil precisa de você. As lendas estão desaparecendo. Ouça o chamado e torne-se um Escolhido.
+                </p>
+                <a href="rpg.html" class="quick-start-btn">
+                    <i class="fas fa-play-circle"></i> Iniciar Aventura
+                </a>
+                <p style="margin-top: 20px; color: #bdc3c7; font-size: 0.9rem;">
+                    Jogue diretamente no navegador - sem downloads necessários!
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#story">História</a>
+                <a href="#legends">Lendas</a>
+                <a href="#features">Recursos</a>
+                <a href="#play">Jogar</a>
+                <a href="https://github.com/seuusuario/renascimento-das-lendas" target="_blank">GitHub</a>
+            </div>
+            
+            <div class="copyright">
+                <p>Renascimento das Lendas &copy; 2023 - Um RPG baseado na mitologia brasileira</p>
+                <p style="margin-top: 10px; font-style: italic;">
+                    "Quando as lendas são esquecidas, o mundo adoece. Quando são lembradas, renascem."
+                </p>
+                <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7;">
+                    Desenvolvido com ❤️ para celebrar a cultura brasileira
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Criar formas flutuantes
+        function createFloatingShapes() {
+            const container = document.getElementById('floatingShapes');
+            const colors = [
+                'rgba(155, 89, 182, 0.1)',  // Roxo (Legend)
+                'rgba(46, 139, 87, 0.1)',   // Verde (Forest)
+                'rgba(52, 152, 219, 0.1)',  // Azul (Water)
+                'rgba(211, 84, 0, 0.1)'     // Laranja (Earth)
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                const shape = document.createElement('div');
+                shape.className = 'shape';
+                
+                // Tamanho aleatório
+                const size = Math.random() * 150 + 50;
+                shape.style.width = `${size}px`;
+                shape.style.height = `${size}px`;
+                
+                // Posição aleatória
+                shape.style.left = `${Math.random() * 100}%`;
+                shape.style.top = `${Math.random() * 100}%`;
+                
+                // Cor aleatória
+                shape.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Animação única
+                const duration = Math.random() * 30 + 20;
+                const delay = Math.random() * 10;
+                shape.style.animation = `float ${duration}s infinite linear ${delay}s`;
+                
+                container.appendChild(shape);
+            }
+        }
+        
+        // Efeito de digitação no subtítulo
+        function typeWriterEffect() {
+            const text = "O Chamado dos Protetores do Brasil";
+            const element = document.querySelector('.logo-subtitle');
+            let i = 0;
+            
+            element.textContent = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                }
+            }
+            
+            setTimeout(type, 1000);
+        }
+        
+        // Suavizar scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Efeito de brilho nos botões
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                this.style.setProperty('--mouse-x', `${x}px`);
+                this.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+        
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingShapes();
+            typeWriterEffect();
+            
+            // Verificar se há personagens salvos
+            if (localStorage.getItem('lendas_characters')) {
+                const characters = JSON.parse(localStorage.getItem('lendas_characters'));
+                if (characters.length > 0) {
+                    const quickStartBtn = document.querySelector('.quick-start-btn');
+                    quickStartBtn.innerHTML = '<i class="fas fa-redo"></i> Continuar Aventura';
+                    quickStartBtn.style.background = 'linear-gradient(45deg, var(--secondary), var(--legend))';
+                }
+            }
+            
+            // Adicionar efeito de entrada para os cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observar todos os cards
+            document.querySelectorAll('.feature-card, .legend-card, .action-btn').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+        });
+        
+        // Efeito de parallax nas formas
+        window.addEventListener('scroll', () => {
+            const shapes = document.querySelectorAll('.shape');
+            const scrolled = window.pageYOffset;
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + (index * 0.05);
+                shape.style.transform = `translateY(${scrolled * speed * 0.1}px) rotate(${scrolled * 0.05}deg)`;
+            });
+        });
+        
+        // Modo escuro/claro (simples)
+        const themeToggle = document.createElement('button');
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        themeToggle.style.position = 'fixed';
+        themeToggle.style.bottom = '20px';
+        themeToggle.style.right = '20px';
+        themeToggle.style.width = '50px';
+        themeToggle.style.height = '50px';
+        themeToggle.style.borderRadius = '50%';
+        themeToggle.style.background = 'var(--legend)';
+        themeToggle.style.color = 'white';
+        themeToggle.style.border = 'none';
+        themeToggle.style.cursor = 'pointer';
+        themeToggle.style.zIndex = '1000';
+        themeToggle.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            if (document.body.classList.contains('light-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                document.body.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #f5f5f5 100%)';
+                document.body.style.color = '#333';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                document.body.style.background = 'linear-gradient(135deg, #0c1e13 0%, #1a472a 50%, #0c1e13 100%)';
+                document.body.style.color = 'var(--light)';
+            }
+        });
+        
+        document.body.appendChild(themeToggle);
+    </script>
 </body>
 </html>
