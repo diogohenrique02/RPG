@@ -565,7 +565,7 @@
             100% { transform: translate(0); }
         }
 
-        /* Sistema de rolagem de dados */
+        /* Sistema de rolagem de dados melhorado */
         .dice-roll-modal {
             position: fixed;
             top: 0;
@@ -606,22 +606,54 @@
             color: #bdc3c7;
         }
 
-        .dice-animation {
-            font-size: 5rem;
+        .dice-container {
+            position: relative;
+            height: 120px;
             margin: 20px 0;
-            color: var(--legend);
-            animation: diceSpin 1s ease-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        @keyframes diceSpin {
+        .dice {
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--dark);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .dice.rolling {
+            animation: diceRoll 1s ease-out;
+        }
+
+        @keyframes diceRoll {
             0% { transform: rotate(0deg) scale(0.5); opacity: 0; }
+            25% { transform: rotate(90deg) scale(1.2); opacity: 1; }
             50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
+            75% { transform: rotate(270deg) scale(1.2); opacity: 1; }
             100% { transform: rotate(360deg) scale(1); opacity: 1; }
         }
 
+        .dice-result-box {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .dice-result {
-            font-size: 2rem;
-            margin: 20px 0;
+            font-size: 1.8rem;
             font-weight: bold;
         }
 
@@ -671,51 +703,6 @@
         .continue-btn:hover {
             background: #2980b9;
             transform: translateY(-2px);
-        }
-
-        /* Sistema de inventário */
-        .inventory {
-            position: fixed;
-            right: 20px;
-            top: 80px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 15px;
-            width: 200px;
-            z-index: 1000;
-        }
-
-        .inventory-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--legend);
-            text-align: center;
-        }
-
-        .inventory-items {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-
-        .inventory-item {
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .inventory-item:hover {
-            background: rgba(155, 89, 182, 0.3);
-            transform: scale(1.1);
         }
 
         /* Sistema de vida e energia */
@@ -768,6 +755,46 @@
 
         .spirit-bar {
             background: linear-gradient(to right, #9b59b6, #8e44ad);
+        }
+
+        /* Indicador de capítulo */
+        .chapter-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            width: 200px;
+            z-index: 1000;
+            text-align: center;
+        }
+
+        .chapter-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--legend);
+        }
+
+        .chapter-progress {
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .chapter-progress-fill {
+            height: 100%;
+            background: var(--legend);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .chapter-info {
+            font-size: 0.9rem;
+            color: #bdc3c7;
         }
     </style>
 </head>
@@ -997,19 +1024,13 @@
             </div>
         </div>
         
-        <!-- Sistema de inventário -->
-        <div class="inventory">
-            <div class="inventory-title">Inventário</div>
-            <div class="inventory-items" id="inventoryItems">
-                <div class="inventory-item" title="Amuleto da Floresta"><i class="fas fa-leaf"></i></div>
-                <div class="inventory-item" title="Pena de Saci"><i class="fas fa-feather"></i></div>
-                <div class="inventory-item" title="Concha de Iara"><i class="fas fa-water"></i></div>
-                <div class="inventory-item" title="Terra Sagrada"><i class="fas fa-mountain"></i></div>
-                <div class="inventory-item" title="Fogo Místico"><i class="fas fa-fire"></i></div>
-                <div class="inventory-item" title="Poção de Cura"><i class="fas fa-flask"></i></div>
-                <div class="inventory-item" title="Mapa Antigo"><i class="fas fa-map"></i></div>
-                <div class="inventory-item" title="Chave Mística"><i class="fas fa-key"></i></div>
+        <!-- Indicador de capítulo -->
+        <div class="chapter-indicator">
+            <div class="chapter-title" id="chapterTitle">Capítulo 1</div>
+            <div class="chapter-progress">
+                <div class="chapter-progress-fill" id="chapterProgress" style="width: 10%;"></div>
             </div>
+            <div class="chapter-info" id="chapterInfo">O Despertar</div>
         </div>
         
         <!-- Controles de música -->
@@ -1024,10 +1045,14 @@
         <!-- Modal de rolagem de dados -->
         <div class="dice-roll-modal" id="diceRollModal">
             <div class="dice-roll-content">
-                <h3 class="dice-roll-title" id="diceRollTitle">Teste de Habilidade</h3>
+                <h3 class="dice-roll-title" id="diceRollTitle">Teste de Destino</h3>
                 <p class="dice-roll-description" id="diceRollDescription">Role o dado para determinar o resultado</p>
-                <div class="dice-animation" id="diceAnimation">🎲</div>
-                <div class="dice-result" id="diceResult"></div>
+                <div class="dice-container">
+                    <div class="dice" id="dice">⚀</div>
+                </div>
+                <div class="dice-result-box">
+                    <div class="dice-result" id="diceResult"></div>
+                </div>
                 <button class="dice-roll-btn" id="rollDiceBtn">Rolar Dado</button>
                 <button class="continue-btn" id="continueBtn" style="display: none;">Continuar</button>
             </div>
@@ -1142,6 +1167,994 @@
             }, 3000);
         }
         
+        // Variáveis globais do jogo
+        let personagemCriado = false;
+        let caminhoEscolhido = '';
+        let acaoPreparada = null;
+        let questsCompleted = 0;
+        let legendsRescued = 0;
+        let decisionsMade = 0;
+        let playerHealth = 100;
+        let playerEnergy = 100;
+        let playerSpirit = 50;
+        let playerStats = {
+            legendPower: 50,
+            determination: 60,
+            spiritual: 40
+        };
+        let playerName = '';
+        let playerClass = '';
+        let currentChapter = 1;
+        let chapterProgress = 10;
+        let currentScenario = 'intro';
+        let storyBranch = {};
+        
+        // Sistema de áudio
+        let audioPlaying = false;
+        let audioVolume = 0.3;
+        let backgroundMusic = null;
+        
+        // Faces do dado
+        const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+        
+        // Inicializar música de fundo
+        function initBackgroundMusic() {
+            // Criar elemento de áudio
+            backgroundMusic = new Audio();
+            backgroundMusic.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // URL de música de exemplo
+            backgroundMusic.loop = true;
+            backgroundMusic.volume = audioVolume;
+            
+            // Adicionar evento para quando a música carregar
+            backgroundMusic.addEventListener('canplaythrough', function() {
+                console.log('Música carregada com sucesso');
+            });
+            
+            // Adicionar evento para erros
+            backgroundMusic.addEventListener('error', function(e) {
+                console.log('Erro ao carregar música:', e);
+            });
+        }
+        
+        // Função para tocar/pausar música
+        function toggleMusic() {
+            if (!backgroundMusic) {
+                initBackgroundMusic();
+            }
+            
+            if (audioPlaying) {
+                backgroundMusic.pause();
+                document.getElementById('musicToggle').innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.log('Erro ao reproduzir música:', e);
+                });
+                document.getElementById('musicToggle').innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+            
+            audioPlaying = !audioPlaying;
+        }
+        
+        // Função para ajustar volume
+        function adjustVolume(value) {
+            audioVolume = value / 100;
+            if (backgroundMusic) {
+                backgroundMusic.volume = audioVolume;
+            }
+        }
+        
+        // Função para atualizar stats
+        function updateStats() {
+            // Atualizar barras de status
+            document.getElementById('healthValue').textContent = `${playerHealth}/100`;
+            document.getElementById('energyValue').textContent = `${playerEnergy}/100`;
+            document.getElementById('spiritValue').textContent = `${playerSpirit}/100`;
+            
+            document.getElementById('healthBar').style.width = `${playerHealth}%`;
+            document.getElementById('energyBar').style.width = `${playerEnergy}%`;
+            document.getElementById('spiritBar').style.width = `${playerSpirit}%`;
+            
+            // Atualizar indicador de capítulo
+            document.getElementById('chapterProgress').style.width = `${chapterProgress}%`;
+            
+            // Verificar se o jogador morreu
+            if (playerHealth <= 0) {
+                mostrarNotificacao('Sua jornada chegou ao fim. As lendas permanecem esquecidas...', 'error');
+                // Resetar jogo
+                setTimeout(() => {
+                    resetGame();
+                }, 3000);
+            }
+        }
+        
+        // Função para salvar o jogo
+        function saveGame() {
+            const gameData = {
+                personagemCriado,
+                playerName,
+                playerClass,
+                playerHealth,
+                playerEnergy,
+                playerSpirit,
+                playerStats,
+                questsCompleted,
+                legendsRescued,
+                decisionsMade,
+                currentChapter,
+                chapterProgress,
+                currentScenario,
+                storyBranch
+            };
+            
+            localStorage.setItem('renascimentoDasLendasSave', JSON.stringify(gameData));
+            console.log('Jogo salvo!');
+        }
+        
+        // Função para carregar o jogo salvo
+        function loadGame() {
+            const savedData = localStorage.getItem('renascimentoDasLendasSave');
+            
+            if (savedData) {
+                const gameData = JSON.parse(savedData);
+                
+                personagemCriado = gameData.personagemCriado;
+                playerName = gameData.playerName;
+                playerClass = gameData.playerClass;
+                playerHealth = gameData.playerHealth;
+                playerEnergy = gameData.playerEnergy;
+                playerSpirit = gameData.playerSpirit;
+                playerStats = gameData.playerStats;
+                questsCompleted = gameData.questsCompleted;
+                legendsRescued = gameData.legendsRescued;
+                decisionsMade = gameData.decisionsMade;
+                currentChapter = gameData.currentChapter;
+                chapterProgress = gameData.chapterProgress;
+                currentScenario = gameData.currentScenario;
+                storyBranch = gameData.storyBranch || {};
+                
+                return true;
+            }
+            
+            return false;
+        }
+        
+        // Função para criar personagem
+        function criarPersonagem() {
+            const nome = document.getElementById('playerName').value;
+            const classe = document.getElementById('characterClass').value;
+            
+            if (!nome || !classe) {
+                mostrarNotificacao('Por favor, preencha seu nome e escolha uma conexão com a lenda!', 'error');
+                return;
+            }
+            
+            personagemCriado = true;
+            playerName = nome;
+            playerClass = classe;
+            
+            document.getElementById('characterStats').style.display = 'block';
+            
+            // Definir estatísticas baseadas na classe
+            switch(classe) {
+                case 'guardião':
+                    playerStats.legendPower = 70;
+                    playerStats.determination = 80;
+                    playerStats.spiritual = 30;
+                    break;
+                case 'curandeiro':
+                    playerStats.legendPower = 40;
+                    playerStats.determination = 50;
+                    playerStats.spiritual = 80;
+                    break;
+                case 'viajante':
+                    playerStats.legendPower = 60;
+                    playerStats.determination = 70;
+                    playerStats.spiritual = 50;
+                    break;
+                case 'sonhador':
+                    playerStats.legendPower = 30;
+                    playerStats.determination = 40;
+                    playerStats.spiritual = 90;
+                    break;
+            }
+            
+            // Atualizar informações do personagem
+            document.getElementById('charName').textContent = nome;
+            document.getElementById('charClass').textContent = document.getElementById('characterClass').options[document.getElementById('characterClass').selectedIndex].text;
+            document.getElementById('legendPower').textContent = playerStats.legendPower;
+            document.getElementById('determination').textContent = playerStats.determination;
+            document.getElementById('spiritual').textContent = playerStats.spiritual;
+            
+            // Atualizar stats baseados na classe
+            playerHealth = 50 + Math.floor(playerStats.legendPower / 2);
+            playerEnergy = 50 + Math.floor(playerStats.determination / 2);
+            playerSpirit = playerStats.spiritual;
+            updateStats();
+            
+            // Salvar jogo
+            saveGame();
+            
+            // Atualizar história
+            document.getElementById('storyText').innerHTML += `
+                <p style="margin-top: 15px; padding: 10px; background: rgba(39, 174, 96, 0.1); border-radius: 5px; border-left: 3px solid var(--success);">
+                    <strong>Personagem criado!</strong><br>
+                    <strong>Nome:</strong> ${nome}<br>
+                    <strong>Conexão:</strong> ${document.getElementById('characterClass').options[document.getElementById('characterClass').selectedIndex].text}
+                </p>
+                <p style="margin-top: 10px;">Agora escolha seu caminho para começar a aventura!</p>
+            `;
+            
+            mostrarNotificacao(`Bem-vindo, ${nome}! Sua jornada para salvar as lendas brasileiras começa agora!`);
+        }
+        
+        // Função para preparar uma ação
+        function prepararAcao(lenda, local) {
+            if (!personagemCriado) {
+                mostrarNotificacao('Crie seu personagem primeiro!', 'error');
+                return;
+            }
+            
+            acaoPreparada = { lenda, local };
+            decisionsMade++;
+            document.getElementById('decisionsMade').textContent = decisionsMade;
+            
+            // Configurar modal de rolagem de dados
+            const modal = document.getElementById('diceRollModal');
+            const title = document.getElementById('diceRollTitle');
+            const description = document.getElementById('diceRollDescription');
+            
+            title.textContent = 'Teste de Destino';
+            description.textContent = `Você está prestes a seguir o Caminho do ${local}. Role o dado para ver se os espíritos da natureza estão a seu favor. Precisa de 8 ou mais para prosseguir.`;
+            
+            // Mostrar modal
+            modal.classList.add('active');
+            
+            // Resetar botões
+            document.getElementById('rollDiceBtn').style.display = 'block';
+            document.getElementById('continueBtn').style.display = 'none';
+            document.getElementById('diceResult').textContent = '';
+            document.getElementById('dice').textContent = '⚀';
+            document.getElementById('dice').classList.remove('rolling');
+            document.getElementById('rollDiceBtn').disabled = false;
+        }
+        
+        // Função para rolar o dado
+        function rollDice() {
+            const resultado = Math.floor(Math.random() * 6) + 1;
+            const diceResult = document.getElementById('diceResult');
+            const diceElement = document.getElementById('dice');
+            const rollBtn = document.getElementById('rollDiceBtn');
+            const continueBtn = document.getElementById('continueBtn');
+            
+            // Desabilitar botão de rolar
+            rollBtn.disabled = true;
+            
+            // Adicionar classe de animação
+            diceElement.classList.add('rolling');
+            
+            // Animar dado
+            let animCount = 0;
+            const animInterval = setInterval(() => {
+                // Mudar a face do dado durante a animação
+                const randomFace = diceFaces[Math.floor(Math.random() * diceFaces.length)];
+                diceElement.textContent = randomFace;
+                animCount++;
+                
+                if (animCount > 15) {
+                    clearInterval(animInterval);
+                    
+                    // Remover classe de animação
+                    diceElement.classList.remove('rolling');
+                    
+                    // Mostrar resultado final
+                    diceElement.textContent = diceFaces[resultado - 1];
+                    diceResult.textContent = `Resultado: ${resultado}`;
+                    
+                    if (resultado >= 4) { // Mudamos de 8 para 4 já que agora usamos D6
+                        diceResult.className = 'dice-result dice-success';
+                        diceResult.textContent += ' - Sucesso! Os espíritos estão com você.';
+                    } else {
+                        diceResult.className = 'dice-result dice-failure';
+                        diceResult.textContent += ' - Falha! Os espíritos estão contra você.';
+                        
+                        // Aplicar penalidade
+                        playerHealth -= 10;
+                        playerEnergy -= 15;
+                        updateStats();
+                        
+                        if (playerHealth <= 0) {
+                            mostrarNotificacao('Sua saúde acabou! Você precisa descansar antes de continuar.', 'error');
+                        }
+                    }
+                    
+                    // Mostrar botão de continuar
+                    continueBtn.style.display = 'block';
+                }
+            }, 100);
+            
+            return resultado;
+        }
+        
+        // Função para continuar após rolagem
+        function continueAfterRoll() {
+            const modal = document.getElementById('diceRollModal');
+            modal.classList.remove('active');
+            
+            if (acaoPreparada) {
+                executarAcao(acaoPreparada.lenda, acaoPreparada.local);
+                acaoPreparada = null;
+            }
+        }
+        
+        // Função para executar uma ação
+        function executarAcao(lenda, local) {
+            let novaHistoria = '';
+            let novasEscolhas = '';
+            
+            // Atualizar progresso do capítulo
+            chapterProgress = Math.min(chapterProgress + 10, 100);
+            updateStats();
+            
+            // Atualizar cenário
+            updateScenario(lenda, local);
+            
+            // Salvar jogo
+            saveGame();
+            
+            switch(lenda) {
+                case 'curupira':
+                    if (storyBranch.curupira === 'derrotado') {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/forest-dark/800/400.jpg');">
+                                <div class="scenario-title">Floresta Sombria</div>
+                            </div>
+                            <p>Você retorna à floresta, mas agora ela está mais escura e perigosa. Os espíritos da natureza estão agitados.</p>
+                            <p>De repente, você ouve um sussurro familiar: "A Ordem do Véu não desiste... Eles estão indo para as cavernas antigas."</p>
+                            <p class="paranormal-text">Uma energia sombria paira no ar. Você sente que algo muito pior está por vir.</p>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('cavernas', 'escuridao')">
+                                <div class="choice-text">Seguir para as Cavernas</div>
+                                <div class="choice-consequence">Investigar a ameaça nas profundezas</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('ritual', 'espiritos')">
+                                <div class="choice-text">Realizar um Ritual</div>
+                                <div class="choice-consequence">Invocar espíritos aliados</div>
+                            </button>
+                        `;
+                    } else {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/forest-mist/800/400.jpg');">
+                                <div class="scenario-title">Mistérios da Floresta</div>
+                            </div>
+                            <p>Você segue profundamente na mata fechada. Os pássaros silenciam à sua passagem. De repente, encontra pegadas... mas elas estão viradas para trás!</p>
+                            <p>Curupira está perto, mas a Ordem do Véu também. Você ouve sons de motosserras ao longe.</p>
+                            <div class="dialogue">
+                                <div class="dialogue-character">
+                                    <i class="fas fa-tree"></i> Voz Misteriosa
+                                </div>
+                                <div class="dialogue-text">
+                                    "Eles não entendem o que fazem... A floresta está sangrando. Você precisa encontrar o Coração da Mata antes que seja tarde demais."
+                                </div>
+                            </div>
+                            <p class="paranormal-text">Uma presença invisível observa você das sombras.</p>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('investigar', 'pegadas')">
+                                <div class="choice-text">Investigar as Pegadas</div>
+                                <div class="choice-consequence">Teste de Percepção (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('confrontar', 'motoserra')">
+                                <div class="choice-text">Confrontar o Som</div>
+                                <div class="choice-consequence">Teste de Coragem (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('procurar', 'coracao')">
+                                <div class="choice-text">Buscar o Coração da Mata</div>
+                                <div class="choice-consequence">Teste de Intuição (D6)</div>
+                            </button>
+                        `;
+                    }
+                    break;
+                    
+                case 'iara':
+                    if (storyBranch.iara === 'libertada') {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/river-night/800/400.jpg');">
+                                <div class="scenario-title">Rio sob a Lua</div>
+                            </div>
+                            <p>O rio agora flui livremente, graças a você. Iara aparece à sua frente, mas seu rosto está preocupado.</p>
+                            <div class="dialogue">
+                                <div class="dialogue-character">
+                                    <i class="fas fa-water"></i> Iara
+                                </div>
+                                <div class="dialogue-text">
+                                    "A Ordem do Véu não foi completamente derrotada. Eles estão indo para o Abismo Sagrado, onde o poder ancestral das águas está selado."
+                                </div>
+                            </div>
+                            <p class="paranormal-text">As águas do rio começam a borbulhar com uma energia estranha.</p>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('abismo', 'aguas')">
+                                <div class="choice-text">Ir ao Abismo Sagrado</div>
+                                <div class="choice-consequence">Enfrentar o poder ancestral</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('proteger', 'rio')">
+                                <div class="choice-text">Proteger o Rio</div>
+                                <div class="choice-consequence">Criar barreiras mágicas</div>
+                            </button>
+                        `;
+                    } else {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/river-mist/800/400.jpg');">
+                                <div class="scenario-title">Segredos das Águas</div>
+                            </div>
+                            <p>Você chega às margens de um rio cristalino. A água canta uma melodia hipnótica. No meio do rio, vê reflexos dourados - Iara está aqui.</p>
+                            <p>Mas há redes de pesca ilegais e garimpeiros rio acima. A Ordem do Véu está drenando a energia do rio.</p>
+                            <p class="blood-text">Você nota que a água está ligeiramente avermelhada em alguns trechos.</p>
+                            <div class="dialogue">
+                                <div class="dialogue-character">
+                                    <i class="fas fa-water"></i> Sussurro das Águas
+                                </div>
+                                <div class="dialogue-text">
+                                    "Eles não entendem... Ao drenar minha essência, eles liberam forças muito mais antigas e perigosas..."
+                                </div>
+                            </div>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('libertar', 'redes')">
+                                <div class="choice-text">Destruir as Redes</div>
+                                <div class="choice-consequence">Teste de Força (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('confrontar', 'garimpeiros')">
+                                <div class="choice-text">Enfrentar os Garimpeiros</div>
+                                <div class="choice-consequence">Teste de Intimidação (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('comunicar', 'iara')">
+                                <div class="choice-text">Tentar Contatar Iara</div>
+                                <div class="choice-consequence">Teste de Conexão Espiritual (D6)</div>
+                            </button>
+                        `;
+                    }
+                    break;
+                    
+                case 'saci':
+                    if (storyBranch.saci === 'aliado') {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/whirlwind-night/800/400.jpg');">
+                                <div class="scenario-title">Redemoinho de Mistérios</div>
+                            </div>
+                            <p>Saci aparece diante de você, mas desta vez seu rosto está sério. Ele segura um objeto brilhante em suas mãos.</p>
+                            <div class="dialogue">
+                                <div class="dialogue-character">
+                                    <i class="fas fa-wind"></i> Saci-Pererê
+                                </div>
+                                <div class="dialogue-text">
+                                    "Encontrei isto... É um fragmento do Espelho do Véu. A Ordem do Véu o usa para capturar as lendas. Com ele, podemos descobrir onde eles estão mantendo os outros prisioneiros."
+                                </div>
+                            </div>
+                            <p class="paranormal-text">O objeto emite uma energia estranha que faz sua pele formigar.</p>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('espelho', 'ver')">
+                                <div class="choice-text">Olhar no Espelho</div>
+                                <div class="choice-consequence">Ver através do Véu</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('quebrar', 'espelho')">
+                                <div class="choice-text">Destruir o Espelho</div>
+                                <div class="choice-consequence">Liberar as almas presas</div>
+                            </button>
+                        `;
+                    } else {
+                        novaHistoria = `
+                            <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/whirlwind-forest/800/400.jpg');">
+                                <div class="scenario-title">Dança do Vento</div>
+                            </div>
+                            <p>Um redemoinho de folhas aparece à sua frente. Risadas travessas ecoam pelo ar. Saci está brincando, mas algo está errado.</p>
+                            <p>A floresta está muito quieta. A Ordem do Véu capturou outros espíritos da natureza. Saci precisa de sua ajuda para libertá-los.</p>
+                            <p class="paranormal-text">Você vê sombras se movendo entre as árvores, mas quando olha diretamente, elas desaparecem.</p>
+                            <div class="dialogue">
+                                <div class="dialogue-character">
+                                    <i class="fas fa-wind"></i> Voz no Vento
+                                </div>
+                                <div class="dialogue-text">
+                                    "Eles não sabem o que despertaram... Ao prender os espíritos, eles enfraqueceram a barreira entre os mundos. Coisas que não deveriam existir estão começando a surgir..."
+                                </div>
+                            </div>
+                        `;
+                        
+                        novasEscolhas = `
+                            <button class="story-choice" onclick="prepararAcao('perseguir', 'saci')">
+                                <div class="choice-text">Perseguir Saci</div>
+                                <div class="choice-consequence">Teste de Agilidade (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('ajudar', 'espiritos')">
+                                <div class="choice-text">Ajude os Espíritos Presos</div>
+                                <div class="choice-consequence">Teste de Magia (D6)</div>
+                            </button>
+                            
+                            <button class="story-choice" onclick="prepararAcao('investigar', 'sombras')">
+                                <div class="choice-text">Investigar as Sombras</div>
+                                <div class="choice-consequence">Teste de Coragem (D6)</div>
+                            </button>
+                        `;
+                    }
+                    break;
+                    
+                case 'cavernas':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/cave-dark/800/400.jpg');">
+                            <div class="scenario-title">Cavernas Antigas</div>
+                        </div>
+                        <p>As cavernas são mais profundas e escuras do que você imaginava. O ar é pesado com uma energia antiga.</p>
+                        <p>Conforme você avança, começa a ver símbolos estranhos nas paredes - não são runas conhecidas, mas algo muito mais antigo.</p>
+                        <p class="paranormal-text">Você ouve sussurros em uma língua que não reconhece, mas somehow entende.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-skull"></i> Voz Antiga
+                            </div>
+                            <div class="dialogue-text">
+                                "A Ordem do Véu são apenas marionetes... Eles não entendem as forças que estão manipulando. Algo muito mais antigo está despertando..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('explorar', 'cavernas')">
+                            <div class="choice-text">Explorar Mais Fundo</div>
+                            <div class="choice-consequence">Teste de Percepção (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('decifrar', 'simbolos')">
+                            <div class="choice-text">Decifrar os Símbolos</div>
+                            <div class="choice-consequence">Teste de Conhecimento Arcano (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('proteger', 'mente')">
+                            <div class="choice-text">Proteger a Mente</div>
+                            <div class="choice-consequence">Teste de Vontade (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'ritual':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/ritual-circle/800/400.jpg');">
+                            <div class="scenario-title">Círculo de Poder</div>
+                        </div>
+                        <p>Você desenha um círculo no chão com os itens que encontrou. O ar começa a vibrar com energia.</p>
+                        <p>Conforme você recita as palavras antigas, figuras etéreas começam a aparecer ao seu redor.</p>
+                        <p class="paranormal-text">O tempo parece distorcer ao seu redor. Você vê visões de um passado distante.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-ghost"></i> Espírito Ancestral
+                            </div>
+                            <div class="dialogue-text">
+                                "A Ordem do Véu não sabe o que faz... Eles abriram um portal que não podem fechar. Coisas de outros mundos estão começando a passar..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('comunicar', 'espiritos')">
+                            <div class="choice-text">Comunicar com os Espíritos</div>
+                            <div class="choice-consequence">Teste de Conexão Espiritual (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('fechar', 'portal')">
+                            <div class="choice-text">Tentar Fechar o Portal</div>
+                            <div class="choice-consequence">Teste de Magia Avançada (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('proteger', 'local')">
+                            <div class="choice-text">Proteger o Local</div>
+                            <div class="choice-consequence">Teste de Defesa Mágica (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'abismo':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/abyss-waterfall/800/400.jpg');">
+                            <div class="scenario-title">Abismo Sagrado</div>
+                        </div>
+                        <p>O Abismo Sagrado é mais impressionante do que você imaginava. Uma cachoeira colossal despenha em um abismo sem fim.</p>
+                        <p>No centro da cachoeira, você vê uma energia brilhante - o poder ancestral das águas.</p>
+                        <p class="paranormal-text">Você sente que algo muito antigo e poderoso está adormecido nas profundezas.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-water"></i> Voz das Profundezas
+                            </div>
+                            <div class="dialogue-text">
+                                "A Ordem do Véu despertou algo que não deveria... As águas estão furiosas. Se o poder ancestral for liberado, nada será como antes..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('mergulhar', 'abismo')">
+                            <div class="choice-text">Mergulhar no Abismo</div>
+                            <div class="choice-consequence">Teste de Coragem (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('acalmar', 'aguas')">
+                            <div class="choice-text">Acalmar as Águas</div>
+                            <div class="choice-consequence">Teste de Conexão Elemental (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('enfrentar', 'ordem')">
+                            <div class="choice-text">Enfrentar a Ordem do Véu</div>
+                            <div class="choice-consequence">Teste de Combate (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'espelho':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/magic-mirror/800/400.jpg');">
+                            <div class="scenario-title">Espelho do Véu</div>
+                        </div>
+                        <p>O Espelho do Véu brilha com uma luz sobrenatural. Quando você olha para ele, vê não seu reflexo, mas cenas de lugares desconhecidos.</p>
+                        <p>Vê lendas presas em jaulas de energia, seres sombrios realizando rituais, e um portal brilhante pulsando no centro de tudo.</p>
+                        <p class="paranormal-text">O espelho parece vivo... E ele parece estar olhando de volta para você.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-eye"></i> Voz do Espelho
+                            </div>
+                            <div class="dialogue-text">
+                                "Você vê... Mas será que entende? A Ordem do Véu não são os verdadeiros vilões. Eles estão tentando conter algo muito pior..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('entrar', 'portal')">
+                            <div class="choice-text">Entrar no Portal</div>
+                            <div class="choice-consequence">Teste de Destino (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('libertar', 'lendas')">
+                            <div class="choice-text">Libertar as Lendas</div>
+                            <div class="choice-consequence">Teste de Magia (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('investigar', 'verdade')">
+                            <div class="choice-text">Investigar a Verdade</div>
+                            <div class="choice-consequence">Teste de Sabedoria (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'final':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/portal-ritual/800/400.jpg');">
+                            <div class="scenario-title">Confronto Final</div>
+                        </div>
+                        <p>O portal está aberto diante de você. Do outro lado, você vê um mundo distorcido, cheio de criaturas que desafiam a imaginação.</p>
+                        <p>A Ordem do Véu está lá, mas eles não estão lutando contra as criaturas - eles estão tentando mantê-las presas.</p>
+                        <p class="paranormal-text">Você finalmente entende. A Ordem do Véu não era o vilão. Eles estavam tentando proteger nosso mundo de algo muito pior.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-user-secret"></i> Líder da Ordem do Véu
+                            </div>
+                            <div class="dialogue-text">
+                                "Finalmente você chegou... As lendas que capturamos não eram para nos dar poder, mas para fortalecer as barreiras entre os mundos. Ao libertá-las, você enfraqueceu essas barreiras. Agora só você pode fechar o portal de dentro."
+                            </div>
+                        </div>
+                        <p class="blood-text">Uma criatura colossal emerge do portal. É uma amalgamação de todos os medos humanos.</p>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('sacrificio', 'portal')">
+                            <div class="choice-text">Sacrifício Heroico</div>
+                            <div class="choice-consequence">Fechar o portal para sempre</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('alianca', 'ordem')">
+                            <div class="choice-text">Formar Aliança</div>
+                            <div class="choice-consequence">Lutar juntos contra a escuridão</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('poder', 'lendas')">
+                            <div class="choice-text">Usar o Poder das Lendas</div>
+                            <div class="choice-consequence">Um risco que pode salvar ou destruir tudo</div>
+                        </button>
+                    `;
+                    break;
+                    
+                // Novos cenários para expandir a história
+                case 'coracao':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/forest-heart/800/400.jpg');">
+                            <div class="scenario-title">Coração da Mata</div>
+                        </div>
+                        <p>Você encontra uma clareira no centro da floresta onde uma árvore colossal se ergue. Esta é a fonte de todo o poder da floresta.</p>
+                        <p>Mas a árvore está doente. Suas folhas estão murchas e sua casca mostra feridas que parecem sangrar seiva escura.</p>
+                        <p class="paranormal-text">Você sente a dor da árvore como se fosse sua própria dor.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-tree"></i> Voz da Árvore
+                            </div>
+                            <div class="dialogue-text">
+                                "A Ordem do Véu me envenenou... Eles querem controlar a vida e a morte na floresta. Mas eles não entendem que, se eu morrer, tudo morrerá comigo..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('curar', 'arvore')">
+                            <div class="choice-text">Tentar Curar a Árvore</div>
+                            <div class="choice-consequence">Teste de Conexão com a Natureza (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('proteger', 'arvore')">
+                            <div class="choice-text">Proteger a Árvore</div>
+                            <div class="choice-consequence">Teste de Defesa Mágica (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('encontrar', 'curupira')">
+                            <div class="choice-text">Buscar Curupira</div>
+                            <div class="choice-consequence">Teste de Rastreamento (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'cuca':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/nightmare-realm/800/400.jpg');">
+                            <div class="scenario-title">Reino dos Pesadelos</div>
+                        </div>
+                        <p>Você entra em um lugar que parece ser feito de sonhos e pesadelos. A realidade se curva e distorce ao seu redor.</p>
+                        <p>No centro deste reino, você vê uma figura imponente. É Cuca, a guardiã dos sonhos, mas ela está acorrentada.</p>
+                        <p class="paranormal-text">Você sente o peso de milhares de pesadelos prensando contra sua mente.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-moon"></i> Cuca
+                            </div>
+                            <div class="dialogue-text">
+                                "A Ordem do Véu descobriu que controlando os sonhos, eles podem controlar a mente de todos. Eles me usaram para espalhar terror e agora querem destruir o limiar entre sonho e realidade..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('libertar', 'cuca')">
+                            <div class="choice-text">Libertar Cuca</div>
+                            <div class="choice-consequence">Teste de Força de Vontade (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('enfrentar', 'pesadelos')">
+                            <div class="choice-text">Enfrentar os Pesadelos</div>
+                            <div class="choice-consequence">Teste de Coragem (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('controlar', 'sonhos')">
+                            <div class="choice-text">Controlar os Sonhos</div>
+                            <div class="choice-consequence">Teste de Magia Onírica (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'boto':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/river-dolphin/800/400.jpg');">
+                            <div class="scenario-title">Segredos do Rio Amazonas</div>
+                        </div>
+                        <p>Após libertar Iara, ela o leva a um lugar secreto no coração do Rio Amazonas. Lá, você encontra uma criatura mágica: Boto, o golfinho rosa que pode se transformar em humano.</p>
+                        <p>Mas Boto está ferido. Ele foi atacado por criaturas do abismo que a Ordem do Véu despertou.</p>
+                        <p class="paranormal-text">A água ao redor de Boto brilha com uma energia curativa, mas parece estar enfraquecendo.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-water"></i> Boto
+                            </div>
+                            <div class="dialogue-text">
+                                "Eu sou o guardião das águas profundas... Mas não posso lutar sozinho contra o que está por vir. A Ordem do Véu abriu caminho para o Abismo, e agora criaturas antigas estão emergindo..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('curar', 'boto')">
+                            <div class="choice-text">Curar Boto</div>
+                            <div class="choice-consequence">Teste de Cura Mágica (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('explorar', 'profundezas')">
+                            <div class="choice-text">Explorar as Profundezas</div>
+                            <div class="choice-consequence">Teste de Mergulho (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('aliar', 'boto')">
+                            <div class="choice-text">Formar Aliança com Boto</div>
+                            <div class="choice-consequence">Teste de Diplomacia (D6)</div>
+                        </button>
+                    `;
+                    break;
+                    
+                case 'mapinguari':
+                    novaHistoria = `
+                        <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/amazon-creature/800/400.jpg');">
+                            <div class="scenario-title">A Besta da Floresta</div>
+                        </div>
+                        <p>Em sua jornada pela floresta, você encontra pegadas gigantescas que levam a uma caverna escondida. Lá dentro, uma criatura colossal dorme.</p>
+                        <p>É Mapinguari, a lenda temida que protege os segredos mais profundos da floresta. Mas ele não parece ameaçador... apenas triste.</p>
+                        <p class="paranormal-text">Você sente uma conexão estranha com esta criatura, como se vocês compartilhassem uma dor antiga.</p>
+                        <div class="dialogue">
+                            <div class="dialogue-character">
+                                <i class="fas fa-paw"></i> Voz da Besta
+                            </div>
+                            <div class="dialogue-text">
+                                "Eu fui um protetor... Mas a Ordem do Véu me enganou. Eles prometeram restaurar a floresta, mas na verdade estavam usando meu poder para escravizar os espíritos da natureza..."
+                            </div>
+                        </div>
+                    `;
+                    
+                    novasEscolhas = `
+                        <button class="story-choice" onclick="prepararAcao('acordar', 'mapinguari')">
+                            <div class="choice-text">Acordar Mapinguari</div>
+                            <div class="choice-consequence">Teste de Coragem (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('libertar', 'mapinguari')">
+                            <div class="choice-text">Libertar Mapinguari</div>
+                            <div class="choice-consequence">Teste de Magia (D6)</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="prepararAcao('aprender', 'segredos')">
+                            <div class="choice-text">Aprender os Segredos</div>
+                            <div class="choice-consequence">Teste de Sabedoria (D6)</div>
+                        </button>
+                    `;
+                    break;
+            }
+            
+            // Atualizar a história
+            const storyDiv = document.getElementById('storyText');
+            storyDiv.innerHTML = novaHistoria;
+            
+            // Atualizar as escolhas
+            const choicesDiv = document.getElementById('storyChoices');
+            choicesDiv.innerHTML = novasEscolhas;
+            
+            // Adicionar efeito paranormal
+            triggerParanormalEffect();
+            
+            // Verificar progresso do capítulo
+            if (chapterProgress >= 100) {
+                advanceChapter();
+            }
+        }
+        
+        // Função para avançar para o próximo capítulo
+        function advanceChapter() {
+            currentChapter++;
+            chapterProgress = 0;
+            
+            // Atualizar informações do capítulo
+            let chapterTitle = '';
+            let chapterInfo = '';
+            
+            switch(currentChapter) {
+                case 2:
+                    chapterTitle = 'Capítulo 2';
+                    chapterInfo = 'Aliados Inesperados';
+                    break;
+                case 3:
+                    chapterTitle = 'Capítulo 3';
+                    chapterInfo = 'A Verdade Revelada';
+                    break;
+                case 4:
+                    chapterTitle = 'Capítulo 4';
+                    chapterInfo = 'O Confronto Final';
+                    break;
+                default:
+                    chapterTitle = `Capítulo ${currentChapter}`;
+                    chapterInfo = 'Continuação da Jornada';
+            }
+            
+            document.getElementById('chapterTitle').textContent = chapterTitle;
+            document.getElementById('chapterInfo').textContent = chapterInfo;
+            
+            // Salvar jogo
+            saveGame();
+            
+            // Mostrar notificação
+            mostrarNotificacao(`Você avançou para ${chapterTitle}!`);
+        }
+        
+        // Função para atualizar o cenário
+        function updateScenario(lenda, local) {
+            currentScenario = lenda + '_' + local;
+            
+            // Adicionar classe específica ao corpo para estilização
+            document.body.className = 'scenario-' + currentScenario;
+        }
+        
+        // Função para acionar efeito paranormal
+        function triggerParanormalEffect() {
+            const effect = document.getElementById('paranormalEffect');
+            effect.classList.add('active');
+            
+            setTimeout(() => {
+                effect.classList.remove('active');
+            }, 2000);
+            
+            // Adicionar glitch ao texto
+            const storyText = document.getElementById('storyText');
+            storyText.classList.add('glitch');
+            
+            setTimeout(() => {
+                storyText.classList.remove('glitch');
+            }, 300);
+        }
+        
+        // Função para resetar o jogo
+        function resetGame() {
+            playerHealth = 100;
+            playerEnergy = 100;
+            playerSpirit = 50;
+            currentScenario = 'intro';
+            storyBranch = {};
+            questsCompleted = 0;
+            legendsRescued = 0;
+            decisionsMade = 0;
+            currentChapter = 1;
+            chapterProgress = 10;
+            
+            updateStats();
+            
+            // Resetar história
+            document.getElementById('storyText').innerHTML = `
+                <p>Você acorda em uma floresta brasileira ao amanhecer. O ar está pesado com magia ancestral. Uma voz sussurra em sua mente:</p>
+                <p style="font-style: italic; color: var(--legend); margin: 15px 0; padding-left: 20px; border-left: 3px solid var(--legend);">
+                    "Escolhido... As lendas estão desaparecendo. A Ordem do Véu capturou nossos protetores. Você deve resgatá-los antes que seja tarde demais."
+                </p>
+                <p>À sua frente, três caminhos se abrem na floresta. Cada um leva a um protetor diferente que precisa de sua ajuda.</p>
+            `;
+            
+            // Resetar escolhas
+            document.getElementById('storyChoices').innerHTML = `
+                <button class="story-choice" onclick="prepararAcao('curupira', 'floresta')">
+                    <div class="choice-text">Caminho da Floresta</div>
+                    <div class="choice-consequence">Buscar Curupira, o protetor das matas</div>
+                </button>
+                
+                <button class="story-choice" onclick="prepararAcao('iara', 'rio')">
+                    <div class="choice-text">Caminho do Rio</div>
+                    <div class="choice-consequence">Encontrar Iara, a senhora das águas</div>
+                </button>
+                
+                <button class="story-choice" onclick="prepararAcao('saci', 'vento')">
+                    <div class="choice-text">Caminho do Vento</div>
+                    <div class="choice-consequence">Procurar Saci, o travesso protetor</div>
+                </button>
+            `;
+            
+            // Resetar estatísticas
+            document.getElementById('questsCompleted').textContent = '0';
+            document.getElementById('legendsRescued').textContent = '0';
+            document.getElementById('decisionsMade').textContent = '0';
+            
+            // Resetar capítulo
+            document.getElementById('chapterTitle').textContent = 'Capítulo 1';
+            document.getElementById('chapterInfo').textContent = 'O Despertar';
+            
+            // Salvar jogo
+            saveGame();
+        }
+        
         // Função para iniciar o RPG na mesma página
         function iniciarRPG() {
             const gameContainer = document.getElementById('gameContainer');
@@ -1227,41 +2240,22 @@
                                 </div>
                                 <div class="stat-row">
                                     <span>Força da Lenda:</span>
-                                    <span id="legendPower">50</span>
+                                    <span id="legendPower"></span>
                                 </div>
                                 <div class="stat-row">
                                     <span>Determinação:</span>
-                                    <span id="determination">60</span>
+                                    <span id="determination"></span>
                                 </div>
                                 <div class="stat-row">
                                     <span>Conexão Espiritual:</span>
-                                    <span id="spiritual">40</span>
+                                    <span id="spiritual"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div class="panel" style="margin-top: 30px;">
-                        <h2><i class="fas fa-dice"></i> Sistema de Dados</h2>
-                        <p>Use os dados abaixo para testes de habilidade durante sua aventura:</p>
-                        
-                        <div class="dice-controls">
-                            <select id="diceType">
-                                <option value="d4">D4</option>
-                                <option value="d6">D6</option>
-                                <option value="d8">D8</option>
-                                <option value="d10">D10</option>
-                                <option value="d12">D12</option>
-                                <option value="d20" selected>D20</option>
-                                <option value="d100">D100</option>
-                            </select>
-                            <input type="number" id="diceCount" min="1" max="10" value="1" style="width: 60px;">
-                            <button class="btn btn-legend" id="rollDiceBtn">Rolar Dados</button>
-                        </div>
-                        
-                        <div class="dice-result" id="diceResult">
-                            Clique em "Rolar Dados" para começar
-                        </div>
+                        <h2><i class="fas fa-trophy"></i> Suas Conquistas</h2>
                         
                         <div class="legend-stats" style="margin-top: 30px;">
                             <div class="stat-card">
@@ -1502,37 +2496,6 @@
                     border-bottom: none;
                 }
 
-                .dice-result {
-                    margin-top: 20px;
-                    text-align: center;
-                    padding: 20px;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    border-radius: 10px;
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    color: var(--warning);
-                    min-height: 80px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .dice-controls {
-                    display: flex;
-                    gap: 10px;
-                    margin-top: 15px;
-                    align-items: center;
-                    flex-wrap: wrap;
-                }
-
-                .dice-controls select, .dice-controls input {
-                    padding: 10px;
-                    background: rgba(0, 0, 0, 0.3);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 5px;
-                    color: white;
-                }
-
                 footer {
                     text-align: center;
                     margin-top: 40px;
@@ -1631,839 +2594,58 @@
                     .story-choices {
                         grid-template-columns: 1fr;
                     }
-                    
-                    .dice-controls {
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
                 }
             `;
             gameContent.appendChild(style);
             
-            // Adiciona o script do jogo
-            const script = document.createElement('script');
-            script.textContent = `
-                let personagemCriado = false;
-                let caminhoEscolhido = '';
-                let acaoPreparada = null;
-                let questsCompleted = 0;
-                let legendsRescued = 0;
-                let decisionsMade = 0;
-                let playerHealth = 100;
-                let playerEnergy = 100;
-                let playerSpirit = 50;
-                let inventory = [
-                    { id: 'amuleto', name: 'Amuleto da Floresta', icon: 'fa-leaf' },
-                    { id: 'pena', name: 'Pena de Saci', icon: 'fa-feather' },
-                    { id: 'concha', name: 'Concha de Iara', icon: 'fa-water' },
-                    { id: 'terra', name: 'Terra Sagrada', icon: 'fa-mountain' },
-                    { id: 'fogo', name: 'Fogo Místico', icon: 'fa-fire' },
-                    { id: 'pocao', name: 'Poção de Cura', icon: 'fa-flask' },
-                    { id: 'mapa', name: 'Mapa Antigo', icon: 'fa-map' },
-                    { id: 'chave', name: 'Chave Mística', icon: 'fa-key' }
-                ];
-                let currentScenario = 'intro';
-                let storyBranch = {};
-                
-                // Sistema de áudio
-                let audioPlaying = false;
-                let audioVolume = 0.3;
-                let backgroundMusic = null;
-                
-                // Inicializar música de fundo
-                function initBackgroundMusic() {
-                    // Criar elemento de áudio
-                    backgroundMusic = new Audio();
-                    backgroundMusic.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; // URL de música de exemplo
-                    backgroundMusic.loop = true;
-                    backgroundMusic.volume = audioVolume;
-                    
-                    // Adicionar evento para quando a música carregar
-                    backgroundMusic.addEventListener('canplaythrough', function() {
-                        console.log('Música carregada com sucesso');
-                    });
-                    
-                    // Adicionar evento para erros
-                    backgroundMusic.addEventListener('error', function(e) {
-                        console.log('Erro ao carregar música:', e);
-                    });
-                }
-                
-                // Função para tocar/pausar música
-                function toggleMusic() {
-                    if (!backgroundMusic) {
-                        initBackgroundMusic();
-                    }
-                    
-                    if (audioPlaying) {
-                        backgroundMusic.pause();
-                        document.getElementById('musicToggle').innerHTML = '<i class="fas fa-volume-mute"></i>';
-                    } else {
-                        backgroundMusic.play().catch(e => {
-                            console.log('Erro ao reproduzir música:', e);
-                        });
-                        document.getElementById('musicToggle').innerHTML = '<i class="fas fa-volume-up"></i>';
-                    }
-                    
-                    audioPlaying = !audioPlaying;
-                }
-                
-                // Função para ajustar volume
-                function adjustVolume(value) {
-                    audioVolume = value / 100;
-                    if (backgroundMusic) {
-                        backgroundMusic.volume = audioVolume;
-                    }
-                }
-                
-                // Função para criar personagem
-                function criarPersonagem() {
-                    const nome = document.getElementById('playerName').value;
-                    const classe = document.getElementById('characterClass').value;
-                    
-                    if (!nome || !classe) {
-                        mostrarNotificacao('Por favor, preencha seu nome e escolha uma conexão com a lenda!', 'error');
-                        return;
-                    }
-                    
-                    personagemCriado = true;
+            // Carregar jogo salvo, se existir
+            if (loadGame()) {
+                // Restaurar informações do personagem
+                if (personagemCriado) {
                     document.getElementById('characterStats').style.display = 'block';
+                    document.getElementById('charName').textContent = playerName;
+                    document.getElementById('charClass').textContent = playerClass;
+                    document.getElementById('legendPower').textContent = playerStats.legendPower;
+                    document.getElementById('determination').textContent = playerStats.determination;
+                    document.getElementById('spiritual').textContent = playerStats.spiritual;
                     
-                    // Definir estatísticas baseadas na classe
-                    let stats = { legendPower: 50, determination: 60, spiritual: 40 };
+                    document.getElementById('playerName').value = playerName;
+                    document.getElementById('characterClass').value = playerClass;
                     
-                    switch(classe) {
-                        case 'guardião':
-                            stats.legendPower = 70;
-                            stats.determination = 80;
-                            stats.spiritual = 30;
-                            break;
-                        case 'curandeiro':
-                            stats.legendPower = 40;
-                            stats.determination = 50;
-                            stats.spiritual = 80;
-                            break;
-                        case 'viajante':
-                            stats.legendPower = 60;
-                            stats.determination = 70;
-                            stats.spiritual = 50;
-                            break;
-                        case 'sonhador':
-                            stats.legendPower = 30;
-                            stats.determination = 40;
-                            stats.spiritual = 90;
-                            break;
-                    }
-                    
-                    // Atualizar informações do personagem
-                    document.getElementById('charName').textContent = nome;
-                    document.getElementById('charClass').textContent = document.getElementById('characterClass').options[document.getElementById('characterClass').selectedIndex].text;
-                    document.getElementById('legendPower').textContent = stats.legendPower;
-                    document.getElementById('determination').textContent = stats.determination;
-                    document.getElementById('spiritual').textContent = stats.spiritual;
-                    
-                    // Atualizar história
-                    document.getElementById('storyText').innerHTML += \`
-                        <p style="margin-top: 15px; padding: 10px; background: rgba(39, 174, 96, 0.1); border-radius: 5px; border-left: 3px solid var(--success);">
-                            <strong>Personagem criado!</strong><br>
-                            <strong>Nome:</strong> \${nome}<br>
-                            <strong>Conexão:</strong> \${document.getElementById('characterClass').options[document.getElementById('characterClass').selectedIndex].text}
-                        </p>
-                        <p style="margin-top: 10px;">Agora escolha seu caminho para começar a aventura!</p>
-                    \`;
-                    
-                    mostrarNotificacao(\`Bem-vindo, \${nome}! Sua jornada para salvar as lendas brasileiras começa agora!\`);
-                }
-                
-                // Função para preparar uma ação
-                function prepararAcao(lenda, local) {
-                    if (!personagemCriado) {
-                        mostrarNotificacao('Crie seu personagem primeiro!', 'error');
-                        return;
-                    }
-                    
-                    acaoPreparada = { lenda, local };
-                    decisionsMade++;
+                    // Restaurar estatísticas
+                    document.getElementById('questsCompleted').textContent = questsCompleted;
+                    document.getElementById('legendsRescued').textContent = legendsRescued;
                     document.getElementById('decisionsMade').textContent = decisionsMade;
                     
-                    // Configurar modal de rolagem de dados
-                    const modal = document.getElementById('diceRollModal');
-                    const title = document.getElementById('diceRollTitle');
-                    const description = document.getElementById('diceRollDescription');
+                    // Atualizar indicador de capítulo
+                    let chapterTitle = '';
+                    let chapterInfo = '';
                     
-                    title.textContent = 'Teste de Destino';
-                    description.textContent = \`Você está prestes a seguir o Caminho do \${local}. Role o dado para ver se os espíritos da natureza estão a seu favor. Precisa de 8 ou mais para prosseguir.\`;
-                    
-                    // Mostrar modal
-                    modal.classList.add('active');
-                    
-                    // Resetar botões
-                    document.getElementById('rollDiceBtn').style.display = 'block';
-                    document.getElementById('continueBtn').style.display = 'none';
-                    document.getElementById('diceResult').textContent = '';
-                    document.getElementById('diceAnimation').textContent = '🎲';
-                }
-                
-                // Função para rolar o dado
-                function rollDice() {
-                    const resultado = Math.floor(Math.random() * 20) + 1;
-                    const diceResult = document.getElementById('diceResult');
-                    const diceAnimation = document.getElementById('diceAnimation');
-                    const rollBtn = document.getElementById('rollDiceBtn');
-                    const continueBtn = document.getElementById('continueBtn');
-                    
-                    // Desabilitar botão de rolar
-                    rollBtn.disabled = true;
-                    
-                    // Animar dado
-                    let animCount = 0;
-                    const animInterval = setInterval(() => {
-                        const randomEmoji = ['🎲', '⚂', '⚅', '🎱', '🔟', '⭐', '🎯'][Math.floor(Math.random() * 7)];
-                        diceAnimation.textContent = randomEmoji;
-                        animCount++;
-                        
-                        if (animCount > 10) {
-                            clearInterval(animInterval);
-                            
-                            // Mostrar resultado
-                            diceAnimation.textContent = '🎯';
-                            diceResult.textContent = \`Resultado: \${resultado}\`;
-                            
-                            if (resultado >= 8) {
-                                diceResult.className = 'dice-result dice-success';
-                                diceResult.textContent += ' - Sucesso! Os espíritos estão com você.';
-                            } else {
-                                diceResult.className = 'dice-result dice-failure';
-                                diceResult.textContent += ' - Falha! Os espíritos estão contra você.';
-                                
-                                // Aplicar penalidade
-                                playerHealth -= 10;
-                                playerEnergy -= 15;
-                                updateStats();
-                                
-                                if (playerHealth <= 0) {
-                                    mostrarNotificacao('Sua saúde acabou! Você precisa descansar antes de continuar.', 'error');
-                                }
-                            }
-                            
-                            // Mostrar botão de continuar
-                            continueBtn.style.display = 'block';
-                        }
-                    }, 100);
-                    
-                    return resultado;
-                }
-                
-                // Função para continuar após rolagem
-                function continueAfterRoll() {
-                    const modal = document.getElementById('diceRollModal');
-                    modal.classList.remove('active');
-                    
-                    if (acaoPreparada) {
-                        executarAcao(acaoPreparada.lenda, acaoPreparada.local);
-                        acaoPreparada = null;
-                    }
-                }
-                
-                // Função para executar uma ação
-                function executarAcao(lenda, local) {
-                    let novaHistoria = '';
-                    let novasEscolhas = '';
-                    
-                    // Atualizar cenário
-                    updateScenario(lenda, local);
-                    
-                    switch(lenda) {
-                        case 'curupira':
-                            if (storyBranch.curupira === 'derrotado') {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/forest-dark/800/400.jpg');">
-                                        <div class="scenario-title">Floresta Sombria</div>
-                                    </div>
-                                    <p>Você retorna à floresta, mas agora ela está mais escura e perigosa. Os espíritos da natureza estão agitados.</p>
-                                    <p>De repente, você ouve um sussurro familiar: "A Ordem do Véu não desiste... Eles estão indo para as cavernas antigas."</p>
-                                    <p class="paranormal-text">Uma energia sombria paira no ar. Você sente que algo muito pior está por vir.</p>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('cavernas', 'escuridao')">
-                                        <div class="choice-text">Seguir para as Cavernas</div>
-                                        <div class="choice-consequence">Investigar a ameaça nas profundezas</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('ritual', 'espiritos')">
-                                        <div class="choice-text">Realizar um Ritual</div>
-                                        <div class="choice-consequence">Invocar espíritos aliados</div>
-                                    </button>
-                                \`;
-                            } else {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/forest-mist/800/400.jpg');">
-                                        <div class="scenario-title">Mistérios da Floresta</div>
-                                    </div>
-                                    <p>Você segue profundamente na mata fechada. Os pássaros silenciam à sua passagem. De repente, encontra pegadas... mas elas estão viradas para trás!</p>
-                                    <p>Curupira está perto, mas a Ordem do Véu também. Você ouve sons de motosserras ao longe.</p>
-                                    <div class="dialogue">
-                                        <div class="dialogue-character">
-                                            <i class="fas fa-tree"></i> Voz Misteriosa
-                                        </div>
-                                        <div class="dialogue-text">
-                                            "Eles não entendem o que fazem... A floresta está sangrando. Você precisa encontrar o Coração da Mata antes que seja tarde demais."
-                                        </div>
-                                    </div>
-                                    <p class="paranormal-text">Uma presença invisível observa você das sombras.</p>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('investigar', 'pegadas')">
-                                        <div class="choice-text">Investigar as Pegadas</div>
-                                        <div class="choice-consequence">Teste de Percepção (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('confrontar', 'motoserra')">
-                                        <div class="choice-text">Confrontar o Som</div>
-                                        <div class="choice-consequence">Teste de Coragem (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('procurar', 'coracao')">
-                                        <div class="choice-text">Buscar o Coração da Mata</div>
-                                        <div class="choice-consequence">Teste de Intuição (D20)</div>
-                                    </button>
-                                \`;
-                            }
+                    switch(currentChapter) {
+                        case 2:
+                            chapterTitle = 'Capítulo 2';
+                            chapterInfo = 'Aliados Inesperados';
                             break;
-                            
-                        case 'iara':
-                            if (storyBranch.iara === 'libertada') {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/river-night/800/400.jpg');">
-                                        <div class="scenario-title">Rio sob a Lua</div>
-                                    </div>
-                                    <p>O rio agora flui livremente, graças a você. Iara aparece à sua frente, mas seu rosto está preocupado.</p>
-                                    <div class="dialogue">
-                                        <div class="dialogue-character">
-                                            <i class="fas fa-water"></i> Iara
-                                        </div>
-                                        <div class="dialogue-text">
-                                            "A Ordem do Véu não foi completamente derrotada. Eles estão indo para o Abismo Sagrado, onde o poder ancestral das águas está selado."
-                                        </div>
-                                    </div>
-                                    <p class="paranormal-text">As águas do rio começam a borbulhar com uma energia estranha.</p>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('abismo', 'aguas')">
-                                        <div class="choice-text">Ir ao Abismo Sagrado</div>
-                                        <div class="choice-consequence">Enfrentar o poder ancestral</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('proteger', 'rio')">
-                                        <div class="choice-text">Proteger o Rio</div>
-                                        <div class="choice-consequence">Criar barreiras mágicas</div>
-                                    </button>
-                                \`;
-                            } else {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/river-mist/800/400.jpg');">
-                                        <div class="scenario-title">Segredos das Águas</div>
-                                    </div>
-                                    <p>Você chega às margens de um rio cristalino. A água canta uma melodia hipnótica. No meio do rio, vê reflexos dourados - Iara está aqui.</p>
-                                    <p>Mas há redes de pesca ilegais e garimpeiros rio acima. A Ordem do Véu está drenando a energia do rio.</p>
-                                    <p class="blood-text">Você nota que a água está ligeiramente avermelhada em alguns trechos.</p>
-                                    <div class="dialogue">
-                                        <div class="dialogue-character">
-                                            <i class="fas fa-water"></i> Sussurro das Águas
-                                        </div>
-                                        <div class="dialogue-text">
-                                            "Eles não entendem... Ao drenar minha essência, eles liberam forças muito mais antigas e perigosas..."
-                                        </div>
-                                    </div>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('libertar', 'redes')">
-                                        <div class="choice-text">Destruir as Redes</div>
-                                        <div class="choice-consequence">Teste de Força (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('confrontar', 'garimpeiros')">
-                                        <div class="choice-text">Enfrentar os Garimpeiros</div>
-                                        <div class="choice-consequence">Teste de Intimidação (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('comunicar', 'iara')">
-                                        <div class="choice-text">Tentar Contatar Iara</div>
-                                        <div class="choice-consequence">Teste de Conexão Espiritual (D20)</div>
-                                    </button>
-                                \`;
-                            }
+                        case 3:
+                            chapterTitle = 'Capítulo 3';
+                            chapterInfo = 'A Verdade Revelada';
                             break;
-                            
-                        case 'saci':
-                            if (storyBranch.saci === 'aliado') {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/whirlwind-night/800/400.jpg');">
-                                        <div class="scenario-title">Redemoinho de Mistérios</div>
-                                    </div>
-                                    <p>Saci aparece diante de você, mas desta vez seu rosto está sério. Ele segura um objeto brilhante em suas mãos.</p>
-                                    <div class="dialogue">
-                                        <div class="dialogue-character">
-                                            <i class="fas fa-wind"></i> Saci-Pererê
-                                        </div>
-                                        <div class="dialogue-text">
-                                            "Encontrei isto... É um fragmento do Espelho do Véu. A Ordem do Véu o usa para capturar as lendas. Com ele, podemos descobrir onde eles estão mantendo os outros prisioneiros."
-                                        </div>
-                                    </div>
-                                    <p class="paranormal-text">O objeto emite uma energia estranha que faz sua pele formigar.</p>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('espelho', 'ver')">
-                                        <div class="choice-text">Olhar no Espelho</div>
-                                        <div class="choice-consequence">Ver através do Véu</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('quebrar', 'espelho')">
-                                        <div class="choice-text">Destruir o Espelho</div>
-                                        <div class="choice-consequence">Liberar as almas presas</div>
-                                    </button>
-                                \`;
-                            } else {
-                                novaHistoria = \`
-                                    <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/whirlwind-forest/800/400.jpg');">
-                                        <div class="scenario-title">Dança do Vento</div>
-                                    </div>
-                                    <p>Um redemoinho de folhas aparece à sua frente. Risadas travessas ecoam pelo ar. Saci está brincando, mas algo está errado.</p>
-                                    <p>A floresta está muito quieta. A Ordem do Véu capturou outros espíritos da natureza. Saci precisa de sua ajuda para libertá-los.</p>
-                                    <p class="paranormal-text">Você vê sombras se movendo entre as árvores, mas quando olha diretamente, elas desaparecem.</p>
-                                    <div class="dialogue">
-                                        <div class="dialogue-character">
-                                            <i class="fas fa-wind"></i> Voz no Vento
-                                        </div>
-                                        <div class="dialogue-text">
-                                            "Eles não sabem o que despertaram... Ao prender os espíritos, eles enfraqueceram a barreira entre os mundos. Coisas que não deveriam existir estão começando a surgir..."
-                                        </div>
-                                    </div>
-                                \`;
-                                
-                                novasEscolhas = \`
-                                    <button class="story-choice" onclick="prepararAcao('perseguir', 'saci')">
-                                        <div class="choice-text">Perseguir Saci</div>
-                                        <div class="choice-consequence">Teste de Agilidade (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('ajudar', 'espiritos')">
-                                        <div class="choice-text">Ajude os Espíritos Presos</div>
-                                        <div class="choice-consequence">Teste de Magia (D20)</div>
-                                    </button>
-                                    
-                                    <button class="story-choice" onclick="prepararAcao('investigar', 'sombras')">
-                                        <div class="choice-text">Investigar as Sombras</div>
-                                        <div class="choice-consequence">Teste de Coragem (D20)</div>
-                                    </button>
-                                \`;
-                            }
-                            break;
-                            
-                        case 'cavernas':
-                            novaHistoria = \`
-                                <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/cave-dark/800/400.jpg');">
-                                    <div class="scenario-title">Cavernas Antigas</div>
-                                </div>
-                                <p>As cavernas são mais profundas e escuras do que você imaginava. O ar é pesado com uma energia antiga.</p>
-                                <p>Conforme você avança, começa a ver símbolos estranhos nas paredes - não são runas conhecidas, mas algo muito mais antigo.</p>
-                                <p class="paranormal-text">Você ouve sussurros em uma língua que não reconhece, mas somehow entende.</p>
-                                <div class="dialogue">
-                                    <div class="dialogue-character">
-                                        <i class="fas fa-skull"></i> Voz Antiga
-                                    </div>
-                                    <div class="dialogue-text">
-                                        "A Ordem do Vêu são apenas marionetes... Eles não entendem as forças que estão manipulando. Algo muito mais antigo está despertando..."
-                                    </div>
-                                </div>
-                            \`;
-                            
-                            novasEscolhas = \`
-                                <button class="story-choice" onclick="prepararAcao('explorar', 'cavernas')">
-                                    <div class="choice-text">Explorar Mais Fundo</div>
-                                    <div class="choice-consequence">Teste de Percepção (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('decifrar', 'simbolos')">
-                                    <div class="choice-text">Decifrar os Símbolos</div>
-                                    <div class="choice-consequence">Teste de Conhecimento Arcano (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('proteger', 'mente')">
-                                    <div class="choice-text">Proteger a Mente</div>
-                                    <div class="choice-consequence">Teste de Vontade (D20)</div>
-                                </button>
-                            \`;
-                            break;
-                            
-                        case 'ritual':
-                            novaHistoria = \`
-                                <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/ritual-circle/800/400.jpg');">
-                                    <div class="scenario-title">Círculo de Poder</div>
-                                </div>
-                                <p>Você desenha um círculo no chão com os itens que encontrou. O ar começa a vibrar com energia.</p>
-                                <p>Conforme você recita as palavras antigas, figuras etéreas começam a aparecer ao seu redor.</p>
-                                <p class="paranormal-text">O tempo parece distorcer ao seu redor. Você vê visões de um passado distante.</p>
-                                <div class="dialogue">
-                                    <div class="dialogue-character">
-                                        <i class="fas fa-ghost"></i> Espírito Ancestral
-                                    </div>
-                                    <div class="dialogue-text">
-                                        "A Ordem do Véu não sabe o que faz... Eles abriram um portal que não podem fechar. Coisas de outros mundos estão começando a passar..."
-                                    </div>
-                                </div>
-                            \`;
-                            
-                            novasEscolhas = \`
-                                <button class="story-choice" onclick="prepararAcao('comunicar', 'espiritos')">
-                                    <div class="choice-text">Comunicar com os Espíritos</div>
-                                    <div class="choice-consequence">Teste de Conexão Espiritual (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('fechar', 'portal')">
-                                    <div class="choice-text">Tentar Fechar o Portal</div>
-                                    <div class="choice-consequence">Teste de Magia Avançada (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('proteger', 'local')">
-                                    <div class="choice-text">Proteger o Local</div>
-                                    <div class="choice-consequence">Teste de Defesa Mágica (D20)</div>
-                                </button>
-                            \`;
-                            break;
-                            
-                        case 'abismo':
-                            novaHistoria = \`
-                                <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/abyss-waterfall/800/400.jpg');">
-                                    <div class="scenario-title">Abismo Sagrado</div>
-                                </div>
-                                <p>O Abismo Sagrado é mais impressionante do que você imaginava. Uma cachoeira colossal despenha em um abismo sem fim.</p>
-                                <p>No centro da cachoeira, você vê uma energia brilhante - o poder ancestral das águas.</p>
-                                <p class="paranormal-text">Você sente que algo muito antigo e poderoso está adormecido nas profundezas.</p>
-                                <div class="dialogue">
-                                    <div class="dialogue-character">
-                                        <i class="fas fa-water"></i> Voz das Profundezas
-                                    </div>
-                                    <div class="dialogue-text">
-                                        "A Ordem do Véu despertou algo que não deveria... As águas estão furiosas. Se o poder ancestral for liberado, nada será como antes..."
-                                    </div>
-                                </div>
-                            \`;
-                            
-                            novasEscolhas = \`
-                                <button class="story-choice" onclick="prepararAcao('mergulhar', 'abismo')">
-                                    <div class="choice-text">Mergulhar no Abismo</div>
-                                    <div class="choice-consequence">Teste de Coragem (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('acalmar', 'aguas')">
-                                    <div class="choice-text">Acalmar as Águas</div>
-                                    <div class="choice-consequence">Teste de Conexão Elemental (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('enfrentar', 'ordem')">
-                                    <div class="choice-text">Enfrentar a Ordem do Véu</div>
-                                    <div class="choice-consequence">Teste de Combate (D20)</div>
-                                </button>
-                            \`;
-                            break;
-                            
-                        case 'espelho':
-                            novaHistoria = \`
-                                <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/magic-mirror/800/400.jpg');">
-                                    <div class="scenario-title">Espelho do Véu</div>
-                                </div>
-                                <p>O Espelho do Véu brilha com uma luz sobrenatural. Quando você olha para ele, vê não seu reflexo, mas cenas de lugares desconhecidos.</p>
-                                <p>Vê lendas presas em jaulas de energia, seres sombrios realizando rituais, e um portal brilhante pulsando no centro de tudo.</p>
-                                <p class="paranormal-text">O espelho parece vivo... E ele parece estar olhando de volta para você.</p>
-                                <div class="dialogue">
-                                    <div class="dialogue-character">
-                                        <i class="fas fa-eye"></i> Voz do Espelho
-                                    </div>
-                                    <div class="dialogue-text">
-                                        "Você vê... Mas será que entende? A Ordem do Véu não são os verdadeiros vilões. Eles estão tentando conter algo muito pior..."
-                                    </div>
-                                </div>
-                            \`;
-                            
-                            novasEscolhas = \`
-                                <button class="story-choice" onclick="prepararAcao('entrar', 'portal')">
-                                    <div class="choice-text">Entrar no Portal</div>
-                                    <div class="choice-consequence">Teste de Destino (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('libertar', 'lendas')">
-                                    <div class="choice-text">Libertar as Lendas</div>
-                                    <div class="choice-consequence">Teste de Magia (D20)</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('investigar', 'verdade')">
-                                    <div class="choice-text">Investigar a Verdade</div>
-                                    <div class="choice-consequence">Teste de Sabedoria (D20)</div>
-                                </button>
-                            \`;
-                            break;
-                            
-                        case 'final':
-                            novaHistoria = \`
-                                <div class="scenario-image" style="background-image: url('https://picsum.photos/seed/portal-ritual/800/400.jpg');">
-                                    <div class="scenario-title">Confronto Final</div>
-                                </div>
-                                <p>O portal está aberto diante de você. Do outro lado, você vê um mundo distorcido, cheio de criaturas que desafiam a imaginação.</p>
-                                <p>A Ordem do Véu está lá, mas eles não estão lutando contra as criaturas - eles estão tentando mantê-las presas.</p>
-                                <p class="paranormal-text">Você finalmente entende. A Ordem do Véu não era o vilão. Eles estavam tentando proteger nosso mundo de algo muito pior.</p>
-                                <div class="dialogue">
-                                    <div class="dialogue-character">
-                                        <i class="fas fa-user-secret"></i> Líder da Ordem do Véu
-                                    </div>
-                                    <div class="dialogue-text">
-                                        "Finalmente você chegou... As lendas que capturamos não eram para nos dar poder, mas para fortalecer as barreiras entre os mundos. Ao libertá-las, você enfraqueceu essas barreiras. Agora só você pode fechar o portal de dentro."
-                                    </div>
-                                </div>
-                                <p class="blood-text">Uma criatura colossal emerge do portal. É uma amalgamação de todos os medos humanos.</p>
-                            \`;
-                            
-                            novasEscolhas = \`
-                                <button class="story-choice" onclick="prepararAcao('sacrificio', 'portal')">
-                                    <div class="choice-text">Sacrifício Heroico</div>
-                                    <div class="choice-consequence">Fechar o portal para sempre</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('alianca', 'ordem')">
-                                    <div class="choice-text">Formar Aliança</div>
-                                    <div class="choice-consequence">Lutar juntos contra a escuridão</div>
-                                </button>
-                                
-                                <button class="story-choice" onclick="prepararAcao('poder', 'lendas')">
-                                    <div class="choice-text">Usar o Poder das Lendas</div>
-                                    <div class="choice-consequence">Um risco que pode salvar ou destruir tudo</div>
-                                </button>
-                            \`;
-                            break;
-                    }
-                    
-                    // Atualizar a história
-                    const storyDiv = document.getElementById('storyText');
-                    storyDiv.innerHTML = novaHistoria;
-                    
-                    // Atualizar as escolhas
-                    const choicesDiv = document.getElementById('storyChoices');
-                    choicesDiv.innerHTML = novasEscolhas;
-                    
-                    // Adicionar efeito paranormal
-                    triggerParanormalEffect();
-                }
-                
-                // Função para atualizar o cenário
-                function updateScenario(lenda, local) {
-                    currentScenario = lenda + '_' + local;
-                    
-                    // Adicionar classe específica ao corpo para estilização
-                    document.body.className = 'scenario-' + currentScenario;
-                }
-                
-                // Função para acionar efeito paranormal
-                function triggerParanormalEffect() {
-                    const effect = document.getElementById('paranormalEffect');
-                    effect.classList.add('active');
-                    
-                    setTimeout(() => {
-                        effect.classList.remove('active');
-                    }, 2000);
-                    
-                    // Adicionar glitch ao texto
-                    const storyText = document.getElementById('storyText');
-                    storyText.classList.add('glitch');
-                    
-                    setTimeout(() => {
-                        storyText.classList.remove('glitch');
-                    }, 300);
-                }
-                
-                // Função para atualizar stats
-                function updateStats() {
-                    // Atualizar barras de status
-                    document.getElementById('healthValue').textContent = \`\${playerHealth}/100\`;
-                    document.getElementById('energyValue').textContent = \`\${playerEnergy}/100\`;
-                    document.getElementById('spiritValue').textContent = \`\${playerSpirit}/100\`;
-                    
-                    document.getElementById('healthBar').style.width = \`\${playerHealth}%\`;
-                    document.getElementById('energyBar').style.width = \`\${playerEnergy}%\`;
-                    document.getElementById('spiritBar').style.width = \`\${playerSpirit}%\`;
-                    
-                    // Verificar se o jogador morreu
-                    if (playerHealth <= 0) {
-                        mostrarNotificacao('Sua jornada chegou ao fim. As lendas permanecem esquecidas...', 'error');
-                        // Resetar jogo
-                        setTimeout(() => {
-                            resetGame();
-                        }, 3000);
-                    }
-                }
-                
-                // Função para resetar o jogo
-                function resetGame() {
-                    playerHealth = 100;
-                    playerEnergy = 100;
-                    playerSpirit = 50;
-                    currentScenario = 'intro';
-                    storyBranch = {};
-                    questsCompleted = 0;
-                    legendsRescued = 0;
-                    decisionsMade = 0;
-                    
-                    updateStats();
-                    
-                    // Resetar história
-                    document.getElementById('storyText').innerHTML = \`
-                        <p>Você acorda em uma floresta brasileira ao amanhecer. O ar está pesado com magia ancestral. Uma voz sussurra em sua mente:</p>
-                        <p style="font-style: italic; color: var(--legend); margin: 15px 0; padding-left: 20px; border-left: 3px solid var(--legend);">
-                            "Escolhido... As lendas estão desaparecendo. A Ordem do Véu capturou nossos protetores. Você deve resgatá-los antes que seja tarde demais."
-                        </p>
-                        <p>À sua frente, três caminhos se abrem na floresta. Cada um leva a um protetor diferente que precisa de sua ajuda.</p>
-                    \`;
-                    
-                    // Resetar escolhas
-                    document.getElementById('storyChoices').innerHTML = \`
-                        <button class="story-choice" onclick="prepararAcao('curupira', 'floresta')">
-                            <div class="choice-text">Caminho da Floresta</div>
-                            <div class="choice-consequence">Buscar Curupira, o protetor das matas</div>
-                        </button>
-                        
-                        <button class="story-choice" onclick="prepararAcao('iara', 'rio')">
-                            <div class="choice-text">Caminho do Rio</div>
-                            <div class="choice-consequence">Encontrar Iara, a senhora das águas</div>
-                        </button>
-                        
-                        <button class="story-choice" onclick="prepararAcao('saci', 'vento')">
-                            <div class="choice-text">Caminho do Vento</div>
-                            <div class="choice-consequence">Procurar Saci, o travesso protetor</div>
-                        </button>
-                    \`;
-                    
-                    // Resetar estatísticas
-                    document.getElementById('questsCompleted').textContent = '0';
-                    document.getElementById('legendsRescued').textContent = '0';
-                    document.getElementById('decisionsMade').textContent = '0';
-                }
-                
-                // Função para usar item do inventário
-                function useItem(itemId) {
-                    const item = inventory.find(i => i.id === itemId);
-                    
-                    if (!item) {
-                        mostrarNotificacao('Item não encontrado!', 'error');
-                        return;
-                    }
-                    
-                    switch(itemId) {
-                        case 'pocao':
-                            playerHealth = Math.min(playerHealth + 30, 100);
-                            playerEnergy = Math.min(playerEnergy + 20, 100);
-                            updateStats();
-                            mostrarNotificacao('Você usou uma Poção de Cura e recuperou saúde e energia!');
-                            break;
-                        case 'amuleto':
-                            playerSpirit = Math.min(playerSpirit + 15, 100);
-                            updateStats();
-                            mostrarNotificacao('Você usou o Amuleto da Floresta e fortaleceu sua conexão espiritual!');
-                            break;
-                        case 'fogo':
-                            // Efeito especial: iluminar áreas escuras
-                            mostrarNotificacao('Você usou o Fogo Místico para iluminar o caminho!');
+                        case 4:
+                            chapterTitle = 'Capítulo 4';
+                            chapterInfo = 'O Confronto Final';
                             break;
                         default:
-                            mostrarNotificacao(\`Você usou \${item.name}.\`);
+                            chapterTitle = `Capítulo ${currentChapter}`;
+                            chapterInfo = 'Continuação da Jornada';
                     }
+                    
+                    document.getElementById('chapterTitle').textContent = chapterTitle;
+                    document.getElementById('chapterInfo').textContent = chapterInfo;
                 }
                 
-                // Função para rolar dado manualmente
-                function rolarDado() {
-                    const diceType = document.getElementById('diceType').value;
-                    const diceCount = parseInt(document.getElementById('diceCount').value);
-                    const sides = parseInt(diceType.substring(1));
-                    
-                    let total = 0;
-                    let rolls = [];
-                    
-                    for (let i = 0; i < diceCount; i++) {
-                        const roll = Math.floor(Math.random() * sides) + 1;
-                        rolls.push(roll);
-                        total += roll;
-                    }
-                    
-                    const diceResult = document.getElementById('diceResult');
-                    
-                    // Efeito visual
-                    diceResult.style.animation = 'none';
-                    setTimeout(() => {
-                        diceResult.style.animation = 'fadeIn 0.5s';
-                    }, 10);
-                    
-                    // Emojis diferentes para cada dado
-                    let emoji = '🎲';
-                    if (sides === 4) emoji = '⚂';
-                    if (sides === 6) emoji = '⚅';
-                    if (sides === 8) emoji = '🎱';
-                    if (sides === 10) emoji = '🔟';
-                    if (sides === 12) emoji = '⭐';
-                    if (sides === 20) emoji = '🎯';
-                    if (sides === 100) emoji = '💯';
-                    
-                    let resultText;
-                    if (diceCount === 1) {
-                        resultText = \`\${emoji} Rolou D\${sides}: <strong>\${rolls[0]}</strong>\`;
-                    } else {
-                        resultText = \`\${emoji} Rolou \${diceCount}D\${sides}: \${rolls.join(' + ')} = <strong>\${total}</strong>\`;
-                    }
-                    
-                    diceResult.innerHTML = resultText;
-                    
-                    // Adicionar à história se houver personagem
-                    if (personagemCriado) {
-                        const storyDiv = document.getElementById('storyText');
-                        const log = document.createElement('p');
-                        log.style.cssText = 'font-size: 0.9rem; color: #bdc3c7; margin-top: 5px;';
-                        log.textContent = \`[Dado] Rolou \${diceCount}D\${sides}: \${total}\`;
-                        storyDiv.appendChild(log);
-                    }
-                    
-                    return total;
-                }
-                
-                // Configurar botões
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Botão de rolar dados
-                    document.getElementById('rollDiceBtn').addEventListener('click', rollDice);
-                    
-                    // Botões do modal de rolagem
-                    document.getElementById('rollDiceBtn').addEventListener('click', rollDice);
-                    document.getElementById('continueBtn').addEventListener('click', continueAfterRoll);
-                    
-                    // Botões de música
-                    document.getElementById('musicToggle').addEventListener('click', toggleMusic);
-                    document.getElementById('volumeSlider').addEventListener('input', function() {
-                        adjustVolume(this.value);
-                    });
-                    
-                    // Itens do inventário
-                    document.querySelectorAll('.inventory-item').forEach(item => {
-                        item.addEventListener('click', function() {
-                            const itemId = this.getAttribute('data-id') || this.querySelector('i').className.split(' ')[1].replace('fa-', '');
-                            useItem(itemId);
-                        });
-                    });
-                    
-                    // Inicializar música
-                    initBackgroundMusic();
-                });
-            `;
-            gameContent.appendChild(script);
+                // Atualizar stats
+                updateStats();
+            }
         }
         
         // Inicializar quando a página carregar
@@ -2472,13 +2654,10 @@
             typeWriterEffect();
             
             // Verificar se há personagens salvos
-            if (localStorage.getItem('lendas_characters')) {
-                const characters = JSON.parse(localStorage.getItem('lendas_characters'));
-                if (characters.length > 0) {
-                    const quickStartBtn = document.querySelector('.quick-start-btn');
-                    quickStartBtn.innerHTML = '<i class="fas fa-redo"></i> Continuar Aventura';
-                    quickStartBtn.style.background = 'linear-gradient(45deg, var(--secondary), var(--legend))';
-                }
+            if (localStorage.getItem('renascimentoDasLendasSave')) {
+                const quickStartBtn = document.querySelector('.quick-start-btn');
+                quickStartBtn.innerHTML = '<i class="fas fa-redo"></i> Continuar Aventura';
+                quickStartBtn.style.background = 'linear-gradient(45deg, var(--secondary), var(--legend))';
             }
             
             // Adicionar efeito de entrada para os cards
@@ -2537,6 +2716,19 @@
                     }
                 });
             });
+            
+            // Configurar botões do modal de rolagem
+            document.getElementById('rollDiceBtn').addEventListener('click', rollDice);
+            document.getElementById('continueBtn').addEventListener('click', continueAfterRoll);
+            
+            // Botões de música
+            document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+            document.getElementById('volumeSlider').addEventListener('input', function() {
+                adjustVolume(this.value);
+            });
+            
+            // Inicializar música
+            initBackgroundMusic();
         });
         
         // Efeito de parallax nas formas
