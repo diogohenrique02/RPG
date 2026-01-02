@@ -179,6 +179,7 @@
             padding: 25px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .action-btn::before {
@@ -434,7 +435,7 @@
                 <p>Em um Brasil onde as lendas foram capturadas pela Ordem do Véu, apenas os Escolhidos podem restaurar o equilíbrio entre o mundo material e o espiritual. Você ouvirá o chamado?</p>
                 
                 <div class="action-buttons">
-                    <a href="#play" class="action-btn">
+                    <a href="#play" class="action-btn" id="jogarAgoraBtn">
                         <i class="fas fa-gamepad"></i>
                         <span>Jogar Agora</span>
                         <small>Comece sua aventura</small>
@@ -571,9 +572,9 @@
                 <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 40px; color: #bdc3c7;">
                     O Brasil precisa de você. As lendas estão desaparecendo. Ouça o chamado e torne-se um Escolhido.
                 </p>
-                <a href="rpg.html" class="quick-start-btn">
+                <button class="quick-start-btn" id="iniciarAventuraBtn">
                     <i class="fas fa-play-circle"></i> Iniciar Aventura
-                </a>
+                </button>
                 <p style="margin-top: 20px; color: #bdc3c7; font-size: 0.9rem;">
                     Jogue diretamente no navegador - sem downloads necessários!
                 </p>
@@ -688,6 +689,608 @@
             });
         });
         
+        // Função para iniciar o RPG
+        function iniciarRPG() {
+            // Cria uma nova janela ou aba com o sistema de RPG
+            const rpgWindow = window.open('', '_blank');
+            
+            // Cria o conteúdo HTML completo do RPG
+            const rpgHTML = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renascimento das Lendas - Sistema de RPG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a472a;
+            --secondary: #2e8b57;
+            --accent: #d35400;
+            --legend: #9b59b6;
+            --light: #ecf0f1;
+            --dark: #0c1e13;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+
+        body {
+            background-color: #1a1a2e;
+            background: linear-gradient(135deg, #0c1e13 0%, #1a472a 50%, #0c1e13 100%);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 2.2rem;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--secondary), var(--legend));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-family: 'Cinzel', serif;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .panel {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid rgba(46, 139, 87, 0.3);
+        }
+
+        .panel h2 {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cinzel', serif;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-legend {
+            background-color: var(--legend);
+        }
+
+        .btn-legend:hover {
+            background-color: #8e44ad;
+        }
+
+        /* Estilos para a história do Renascimento das Lendas */
+        .story-container {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--legend);
+        }
+
+        .story-text {
+            color: var(--light);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .story-choices {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .story-choice {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 2px solid transparent;
+        }
+
+        .story-choice:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-color: var(--light);
+        }
+
+        .legend-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(26, 71, 42, 0.8), rgba(12, 30, 19, 0.8));
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--legend);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--legend);
+            margin: 10px 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .story-choices {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                <h1>Renascimento das Lendas - RPG</h1>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="panel">
+                <h2><i class="fas fa-book-open"></i> Sua Jornada Começa</h2>
+                <div class="story-container">
+                    <div class="story-text" id="storyText">
+                        <p>Você acorda em uma floresta brasileira ao amanhecer. O ar está pesado com magia ancestral. Uma voz sussurra em sua mente:</p>
+                        <p style="font-style: italic; color: var(--legend); margin: 15px 0; padding-left: 20px; border-left: 3px solid var(--legend);">
+                            "Escolhido... As lendas estão desaparecendo. A Ordem do Véu capturou nossos protetores. Você deve resgatá-los antes que seja tarde demais."
+                        </p>
+                        <p>À sua frente, três caminhos se abrem na floresta. Cada um leva a um protetor diferente que precisa de sua ajuda.</p>
+                    </div>
+                    
+                    <div class="story-choices">
+                        <button class="story-choice" onclick="escolherCaminho('curupira')">
+                            <div class="choice-text">Caminho da Floresta</div>
+                            <div class="choice-consequence">Buscar Curupira, o protetor das matas</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="escolherCaminho('iara')">
+                            <div class="choice-text">Caminho do Rio</div>
+                            <div class="choice-consequence">Encontrar Iara, a senhora das águas</div>
+                        </button>
+                        
+                        <button class="story-choice" onclick="escolherCaminho('saci')">
+                            <div class="choice-text">Caminho do Vento</div>
+                            <div class="choice-consequence">Procurar Saci, o travesso protetor</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2><i class="fas fa-user"></i> Seu Personagem</h2>
+                <div class="form-group">
+                    <label for="playerName" style="display: block; margin-bottom: 8px; color: #bdc3c7;">Seu Nome:</label>
+                    <input type="text" id="playerName" placeholder="Digite seu nome" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 5px; margin-bottom: 15px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="characterClass" style="display: block; margin-bottom: 8px; color: #bdc3c7;">Conexão com a Lenda:</label>
+                    <select id="characterClass" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 5px; margin-bottom: 15px;">
+                        <option value="">Escolha sua conexão</option>
+                        <option value="guardião">Guardião da Floresta</option>
+                        <option value="curandeiro">Curandeiro das Águas</option>
+                        <option value="viajante">Viajante do Vento</option>
+                        <option value="sonhador">Sonhador Lúcido</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-legend" onclick="criarPersonagem()">
+                    <i class="fas fa-plus-circle"></i> Criar Personagem
+                </button>
+                
+                <div class="legend-stats" id="characterStats" style="display: none; margin-top: 20px;">
+                    <div class="stat-card">
+                        <div>Força da Lenda</div>
+                        <div class="stat-value" id="legendPower">50</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Determinação</div>
+                        <div class="stat-value" id="determination">60</div>
+                    </div>
+                    <div class="stat-card">
+                        <div>Conexão Espiritual</div>
+                        <div class="stat-value" id="spiritual">40</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel" style="margin-top: 30px;">
+            <h2><i class="fas fa-dice"></i> Sistema de Jogo</h2>
+            <p>Use os dados abaixo para testes de habilidade durante sua aventura:</p>
+            
+            <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                <button class="btn" onclick="rolarDado(6)">
+                    <i class="fas fa-dice-d6"></i> Rolar D6
+                </button>
+                <button class="btn" onclick="rolarDado(10)">
+                    <i class="fas fa-dice-d10"></i> Rolar D10
+                </button>
+                <button class="btn" onclick="rolarDado(20)">
+                    <i class="fas fa-dice-d20"></i> Rolar D20
+                </button>
+                <button class="btn btn-legend" onclick="rolarDado(100)">
+                    <i class="fas fa-dice"></i> Rolar D100
+                </button>
+            </div>
+            
+            <div id="diceResult" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; text-align: center; font-size: 1.2rem; min-height: 60px; display: flex; align-items: center; justify-content: center;">
+                Clique em um dado para rolar
+            </div>
+        </div>
+        
+        <footer>
+            <p>Renascimento das Lendas - RPG Brasileiro &copy; 2023</p>
+            <p>Baseado na mitologia brasileira - Suas escolhas moldam a história!</p>
+        </footer>
+    </div>
+
+    <script>
+        let personagemCriado = false;
+        let caminhoEscolhido = '';
+        
+        function criarPersonagem() {
+            const nome = document.getElementById('playerName').value;
+            const classe = document.getElementById('characterClass').value;
+            
+            if (!nome || !classe) {
+                alert('Por favor, preencha seu nome e escolha uma conexão com a lenda!');
+                return;
+            }
+            
+            personagemCriado = true;
+            document.getElementById('characterStats').style.display = 'grid';
+            
+            // Definir estatísticas baseadas na classe
+            let stats = { legendPower: 50, determination: 60, spiritual: 40 };
+            
+            switch(classe) {
+                case 'guardião':
+                    stats.legendPower = 70;
+                    stats.determination = 80;
+                    stats.spiritual = 30;
+                    break;
+                case 'curandeiro':
+                    stats.legendPower = 40;
+                    stats.determination = 50;
+                    stats.spiritual = 80;
+                    break;
+                case 'viajante':
+                    stats.legendPower = 60;
+                    stats.determination = 70;
+                    stats.spiritual = 50;
+                    break;
+                case 'sonhador':
+                    stats.legendPower = 30;
+                    stats.determination = 40;
+                    stats.spiritual = 90;
+                    break;
+            }
+            
+            document.getElementById('legendPower').textContent = stats.legendPower;
+            document.getElementById('determination').textContent = stats.determination;
+            document.getElementById('spiritual').textContent = stats.spiritual;
+            
+            // Atualizar história
+            document.getElementById('storyText').innerHTML += \`
+                <p style="margin-top: 15px; padding: 10px; background: rgba(39, 174, 96, 0.1); border-radius: 5px; border-left: 3px solid var(--success);">
+                    <strong>Personagem criado!</strong><br>
+                    <strong>Nome:</strong> \${nome}<br>
+                    <strong>Conexão:</strong> \${document.getElementById('characterClass').options[document.getElementById('characterClass').selectedIndex].text}
+                </p>
+            \`;
+            
+            alert(\`Bem-vindo, \${nome}! Sua jornada para salvar as lendas brasileiras começa agora!\`);
+        }
+        
+        function escolherCaminho(lenda) {
+            if (!personagemCriado) {
+                alert('Crie seu personagem primeiro!');
+                return;
+            }
+            
+            caminhoEscolhido = lenda;
+            let mensagem = '';
+            let novaHistoria = '';
+            
+            switch(lenda) {
+                case 'curupira':
+                    mensagem = 'Você escolheu seguir o Caminho da Floresta em busca de Curupira.';
+                    novaHistoria = \`
+                        <p>Você segue profundamente na mata fechada. Os pássaros silenciam à sua passagem. De repente, encontra pegadas... mas elas estão viradas para trás!</p>
+                        <p>Curupira está perto, mas a Ordem do Véu também. Você ouve sons de motosserras ao longe.</p>
+                        <p><strong>O que você faz?</strong></p>
+                    \`;
+                    break;
+                    
+                case 'iara':
+                    mensagem = 'Você escolheu seguir o Caminho do Rio em busca de Iara.';
+                    novaHistoria = \`
+                        <p>Você chega às margens de um rio cristalino. A água canta uma melodia hipnótica. No meio do rio, vê reflexos dourados - Iara está aqui.</p>
+                        <p>Mas há redes de pesca ilegais e garimpeiros rio acima. A Ordo do Véu está drenando a energia do rio.</p>
+                        <p><strong>O que você faz?</strong></p>
+                    \`;
+                    break;
+                    
+                case 'saci':
+                    mensagem = 'Você escolheu seguir o Caminho do Vento em busca de Saci.';
+                    novaHistoria = \`
+                        <p>Um redemoinho de folhas aparece à sua frente. Risadas travessas ecoam pelo ar. Saci está brincando, mas algo está errado.</p>
+                        <p>A floresta está muito quieta. A Ordem do Véu capturou outros espíritos da natureza. Saci precisa de sua ajuda para libertá-los.</p>
+                        <p><strong>O que você faz?</strong></p>
+                    \`;
+                    break;
+            }
+            
+            alert(mensagem);
+            
+            // Atualizar a história
+            const storyDiv = document.getElementById('storyText');
+            storyDiv.innerHTML = novaHistoria;
+            
+            // Atualizar escolhas
+            const choicesDiv = document.querySelector('.story-choices');
+            choicesDiv.innerHTML = \`
+                <button class="story-choice" onclick="tomarAcao('investigar')">
+                    <div class="choice-text">Investigar Cautelosamente</div>
+                    <div class="choice-consequence">Teste de Sabedoria (D20)</div>
+                </button>
+                
+                <button class="story-choice" onclick="tomarAcao('confrontar')">
+                    <div class="choice-text">Confrontar Diretamente</div>
+                    <div class="choice-consequence">Teste de Força (D20)</div>
+                </button>
+                
+                <button class="story-choice" onclick="tomarAcao('negociar')">
+                    <div class="choice-text">Tentar Negociar</div>
+                    <div class="choice-consequence">Teste de Carisma (D20)</div>
+                </button>
+                
+                <button class="story-choice" onclick="tomarAcao('furtivo')">
+                    <div class="choice-text">Ação Furtiva</div>
+                    <div class="choice-consequence">Teste de Destreza (D20)</div>
+                </button>
+            \`;
+        }
+        
+        function tomarAcao(acao) {
+            const resultado = rolarDadoSilencioso(20);
+            let mensagem = \`Você tenta \${acao}. Resultado do dado: \${resultado}\`;
+            
+            // Determinar sucesso (baseado em resultado do dado)
+            if (resultado >= 15) {
+                mensagem += '\\n✅ Sucesso! Você avança em sua missão.';
+                
+                // Adicionar à história
+                const storyDiv = document.getElementById('storyText');
+                storyDiv.innerHTML += \`
+                    <p style="margin-top: 15px; padding: 10px; background: rgba(39, 174, 96, 0.2); border-radius: 5px; border-left: 3px solid var(--success);">
+                        <strong>Sucesso!</strong> Sua ação foi bem-sucedida. Você está mais perto de resgatar a lenda.
+                    </p>
+                \`;
+            } else if (resultado >= 10) {
+                mensagem += '\\n⚠️ Sucesso parcial. Houve consequências.';
+                
+                const storyDiv = document.getElementById('storyText');
+                storyDiv.innerHTML += \`
+                    <p style="margin-top: 15px; padding: 10px; background: rgba(243, 156, 18, 0.2); border-radius: 5px; border-left: 3px solid var(--warning);">
+                        <strong>Sucesso Parcial.</strong> Você progrediu, mas enfrentou dificuldades.
+                    </p>
+                \`;
+            } else {
+                mensagem += '\\n❌ Falha! A situação piorou.';
+                
+                const storyDiv = document.getElementById('storyText');
+                storyDiv.innerHTML += \`
+                    <p style="margin-top: 15px; padding: 10px; background: rgba(231, 76, 60, 0.2); border-radius: 5px; border-left: 3px solid var(--accent);">
+                        <strong>Falha.</strong> Sua ação não teve o efeito desejado. A situação se complicou.
+                    </p>
+                \`;
+            }
+            
+            alert(mensagem);
+            
+            // Continuar história após algum tempo
+            setTimeout(() => {
+                continuarHistoria();
+            }, 1500);
+        }
+        
+        function continuarHistoria() {
+            const storyDiv = document.getElementById('storyText');
+            storyDiv.innerHTML += \`
+                <p style="margin-top: 20px;">
+                    Sua jornada continua. A cada passo, você sente a presença das lendas brasileiras mais fortemente.
+                    A Ordem do Véu não vai desistir facilmente. Mais desafios aguardam...
+                </p>
+                <p><strong>O que você faz a seguir?</strong></p>
+            \`;
+            
+            // Novas escolhas
+            const choicesDiv = document.querySelector('.story-choices');
+            choicesDiv.innerHTML = \`
+                <button class="story-choice" onclick="continuarAventura('buscar')">
+                    <div class="choice-text">Buscar Mais Informações</div>
+                    <div class="choice-consequence">Explorar a área</div>
+                </button>
+                
+                <button class="story-choice" onclick="continuarAventura('descansar')">
+                    <div class="choice-text">Descansar e Planejar</div>
+                    <div class="choice-consequence">Recuperar energias</div>
+                </button>
+                
+                <button class="story-choice" onclick="continuarAventura('confrontar')">
+                    <div class="choice-text">Confrontar a Ordem do Véu</div>
+                    <div class="choice-consequence">Ataque direto</div>
+                </button>
+                
+                <button class="story-choice" onclick="continuarAventura('aliados')">
+                    <div class="choice-text">Buscar Aliados</div>
+                    <div class="choice-consequence">Outras lendas podem ajudar</div>
+                </button>
+            \`;
+        }
+        
+        function continuarAventura(decisao) {
+            alert(\`Você decide \${decisao}. A aventura continua...\`);
+            
+            // Aqui você pode expandir o sistema com mais cenas e decisões
+            document.getElementById('storyText').innerHTML += \`
+                <p style="margin-top: 15px; padding: 10px; background: rgba(155, 89, 182, 0.1); border-radius: 5px; border-left: 3px solid var(--legend);">
+                    <strong>Decisão tomada:</strong> \${decisao}.<br>
+                    O destino das lendas brasileiras está em suas mãos. Continue sua jornada!
+                </p>
+            \`;
+        }
+        
+        function rolarDado(lados) {
+            const resultado = Math.floor(Math.random() * lados) + 1;
+            const diceResult = document.getElementById('diceResult');
+            
+            // Efeito visual
+            diceResult.style.animation = 'none';
+            setTimeout(() => {
+                diceResult.style.animation = 'fadeIn 0.5s';
+            }, 10);
+            
+            // Emojis diferentes para cada dado
+            let emoji = '🎲';
+            if (lados === 6) emoji = '⚄';
+            if (lados === 10) emoji = '🔟';
+            if (lados === 20) emoji = '🎯';
+            if (lados === 100) emoji = '💯';
+            
+            diceResult.innerHTML = \`\${emoji} Rolando D\${lados}: <strong>\${resultado}</strong>\`;
+            
+            // Adicionar à história se houver personagem
+            if (personagemCriado) {
+                const storyDiv = document.getElementById('storyText');
+                const log = document.createElement('p');
+                log.style.cssText = 'font-size: 0.9rem; color: #bdc3c7; margin-top: 5px;';
+                log.textContent = \`[Dado] Rolou D\${lados}: \${resultado}\`;
+                storyDiv.appendChild(log);
+            }
+            
+            return resultado;
+        }
+        
+        function rolarDadoSilencioso(lados) {
+            return Math.floor(Math.random() * lados) + 1;
+        }
+    </script>
+</body>
+</html>`;
+            
+            // Abre a nova janela com o conteúdo
+            rpgWindow.document.open();
+            rpgWindow.document.write(rpgHTML);
+            rpgWindow.document.close();
+            
+            // Foca na nova janela
+            rpgWindow.focus();
+        }
+        
         // Inicializar quando a página carregar
         document.addEventListener('DOMContentLoaded', () => {
             createFloatingShapes();
@@ -725,6 +1328,17 @@
                 card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                 observer.observe(card);
             });
+            
+            // Configurar botões para iniciar o RPG
+            document.getElementById('jogarAgoraBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                iniciarRPG();
+            });
+            
+            document.getElementById('iniciarAventuraBtn').addEventListener('click', (e) => {
+                e.preventDefault();
+                iniciarRPG();
+            });
         });
         
         // Efeito de parallax nas formas
@@ -737,37 +1351,6 @@
                 shape.style.transform = `translateY(${scrolled * speed * 0.1}px) rotate(${scrolled * 0.05}deg)`;
             });
         });
-        
-        // Modo escuro/claro (simples)
-        const themeToggle = document.createElement('button');
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-        themeToggle.style.position = 'fixed';
-        themeToggle.style.bottom = '20px';
-        themeToggle.style.right = '20px';
-        themeToggle.style.width = '50px';
-        themeToggle.style.height = '50px';
-        themeToggle.style.borderRadius = '50%';
-        themeToggle.style.background = 'var(--legend)';
-        themeToggle.style.color = 'white';
-        themeToggle.style.border = 'none';
-        themeToggle.style.cursor = 'pointer';
-        themeToggle.style.zIndex = '1000';
-        themeToggle.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
-        
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            if (document.body.classList.contains('light-mode')) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                document.body.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #f5f5f5 100%)';
-                document.body.style.color = '#333';
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                document.body.style.background = 'linear-gradient(135deg, #0c1e13 0%, #1a472a 50%, #0c1e13 100%)';
-                document.body.style.color = 'var(--light)';
-            }
-        });
-        
-        document.body.appendChild(themeToggle);
     </script>
 </body>
 </html>
