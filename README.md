@@ -43,3 +43,19 @@ Junte-se à resistência e liberte **Curupira, Iara, Saci, Cuca** e outras lenda
 - Animações suaves e efeitos visuais
 - Tema escuro com elementos de mitologia
 - Interface intuitiva e imersiva
+
+###📋 Tarefas em Aberto
+-Adicionar mais lendas brasileiras
+-Criar sistema de multiplayer
+-Desenvolver aplicativo mobile
+-Adicionar sistema de áudio
+
+###🙏 Agradecimentos
+-Às culturas indígenas e africanas que originaram as lendas
+-Aos contadores de histórias que mantiveram as tradições vivas
+-A todos os jogadores e desenvolvedores que ajudarem a testar e melhorar o jogo
+
+###📞 Contato
+-Seu Nome diogo.h -youareidiot12321@gmail.com
+
+#"Quando as lendas são esquecidas, o mundo adoece. Quando são lembradas, renascem."
