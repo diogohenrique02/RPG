@@ -13,7 +13,7 @@ Junte-se à resistência e liberte **Curupira, Iara, Saci, Cuca** e outras lenda
 ## 🎮 Como Jogar
 
 ### 🚀 Início Rápido
-1. Acesse: https://seuusuario.github.io/renascimento-das-lendas
+1. Acesse: https://diogohenrique02.github.io/RPG/
 2. Clique em **"Iniciar Aventura"**
 3. Crie seu **Escolhido**
 4. Escolha sua primeira missão
